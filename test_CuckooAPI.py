@@ -30,7 +30,7 @@ def test_submitfile_bad_status_code(mock_get):
     ExceptionThrown = False
     try:
         api.submitfile('README.md')
-    except CuckooAPI.CuckooExceptions.CuckooAPIMachineNotFound:
+    except CuckooAPI.CuckooExceptions.CuckooAPIBadRequest:
         ExceptionThrown = True
 
     assert ExceptionThrown is True
@@ -83,7 +83,7 @@ def test_getcuckoostatus_exception(mock_get):
 
     try:
         api.getcuckoostatus()
-    except CuckooAPI.CuckooExceptions.CuckooAPIMachineNotFound:
+    except CuckooAPI.CuckooExceptions.CuckooAPIBadRequest:
         ExceptionThrown = True
 
     assert ExceptionThrown is True
@@ -132,7 +132,7 @@ def test_listmachines_exception(mock_get):
 
     try:
         api.listmachines()
-    except CuckooAPI.CuckooExceptions.CuckooAPIMachineNotFound:
+    except CuckooAPI.CuckooExceptions.CuckooAPIBadRequest:
         ExceptionThrown = True
 
     assert ExceptionThrown is True

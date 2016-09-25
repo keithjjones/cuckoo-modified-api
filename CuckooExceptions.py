@@ -37,10 +37,13 @@ class CuckooAPINotAvailable(Exception):
                            "api.py interface?  Or the other way around?")
 
 
-class CuckooAPIMachineNotFound(Exception):
+class CuckooAPIBadRequest(Exception):
     """
     Exception for when a Cuckoo machine is not found.
     """
-    def __init__(self, host):
+    def __init__(self, apiurl):
         Exception.__init__(self, "CuckooAPI:  Unable to connect "
-                           "to: {0}".format(host))
+                           "with URL {0}  Are you mixing "
+                           "calls from Django web interface with the "
+                           "api.py interface?  Or the other way "
+                           "around?".format(apiurl))

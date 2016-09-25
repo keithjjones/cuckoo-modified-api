@@ -36,7 +36,7 @@ def buildapiurl(proto="http", host="127.0.0.1", port=8000,
         if APIPY is True:
             return "{0}://{1}:{2}{3}".format(proto, host, port, action)
         else:
-            return "{0}://{1}:{2}/api/{3}/".format(proto, host, port, action)
+            return "{0}://{1}:{2}/api{3}/".format(proto, host, port, action)
 
 
 #
@@ -88,7 +88,7 @@ class CuckooAPI(object):
             jsonreply = json.loads(request.text)
             return jsonreply
         else:
-            raise CuckooExceptions.CuckooAPIMachineNotFound(self.host)
+            raise CuckooExceptions.CuckooAPIBadRequest(apiurl)
 
     def getcuckoostatus(self):
         """
@@ -106,7 +106,7 @@ class CuckooAPI(object):
             jsonreply = json.loads(request.text)
             return jsonreply
         else:
-            raise CuckooExceptions.CuckooAPIMachineNotFound(self.host)
+            raise CuckooExceptions.CuckooAPIBadRequest(apiurl)
 
     def listmachines(self):
         """
@@ -115,7 +115,7 @@ class CuckooAPI(object):
         """
         # Build the URL
         apiurl = buildapiurl(self.proto, self.host, self.port,
-                             "/cuckoo/status", self.APIPY)
+                             "/machines/list", self.APIPY)
         request = requests.get(apiurl)
 
         # ERROR CHECK request.status_code!
@@ -123,7 +123,7 @@ class CuckooAPI(object):
             jsonreply = json.loads(request.text)
             return jsonreply
         else:
-            raise CuckooExceptions.CuckooAPIMachineNotFound(self.host)
+            raise CuckooExceptions.CuckooAPIBadRequest(apiurl)
 
 #
 # Call main if run as a script
