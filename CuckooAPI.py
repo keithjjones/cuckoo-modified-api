@@ -2,6 +2,7 @@
 # Imports
 #
 import requests
+import json
 import os
 import CuckooExceptions
 
@@ -20,7 +21,8 @@ def main():
 #
 # Static Functions
 #
-def buildapiurl(proto="https", host="127.0.0.1", port="8000", action="/tasks/create/file"):
+def buildapiurl(proto="https", host="127.0.0.1", port="8000",
+                action="/tasks/create/file"):
     """
     Create a URL for the Cuckoo API
     :param proto: http or https
@@ -28,7 +30,7 @@ def buildapiurl(proto="https", host="127.0.0.1", port="8000", action="/tasks/cre
     :param port: The port of the Cuckoo API server
     :param action: The action to perform with the API
     """
-    return "{0}://{1}:{2}{3}/api/{4}".format(proto, host, port, action)
+    return "{0}://{1}:{2}/api/{3}".format(proto, host, port, action)
 
 
 #
@@ -38,7 +40,7 @@ class CuckooAPI(object):
     """
     Class to hold Cuckoo API data.
     """
-    def __init(self, proto="https", host="127.0.0.1", port="8000"):
+    def __init__(self, proto="https", host="127.0.0.1", port="8000"):
         """
         :param proto: http or https
         :param host: Hostname or IP address of Cuckoo server
@@ -52,15 +54,25 @@ class CuckooAPI(object):
         """
         Function to submit a local file to Cuckoo for analysis.
         :param filepath: Path to a file to submit.
-        :results : Return the task ID of the submission
+        :results : Returns the json results of the submission
         """
         # Error if the file does not exist
-        if filepath is None or not os.path.exists(filepath):
-            raise CuckooExceptions.CuckooFileNotFoundException
+        if (filepath is None or not os.path.exists(filepath) or
+                not os.path.isfile(filepath)):
+            raise CuckooExceptions.CuckooInvalidFileException(filepath)
 
         # Build the URL
         apiurl = buildapiurl(self.proto, self.host, self.port,
-                                           "/tasks/create/file/")
+                             "/tasks/create/file/")
+
+        with open(filepath, "rb") as sample:
+            multipart_file = {"file": ("temp_file_name", sample)}
+            request = requests.post(apiurl, files=multipart_file)
+
+        # ERROR CHECK request.status_code!
+
+        jsonreply = json.loads(request.text)
+        return jsonreply
 
 
 #
