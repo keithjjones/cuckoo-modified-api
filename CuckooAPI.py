@@ -43,7 +43,8 @@ class CuckooAPI(object):
     """
     Class to hold Cuckoo API data.
     """
-    def __init__(self, proto="http", host="127.0.0.1", port="8000", APIPY=False):
+    def __init__(self, proto="http", host="127.0.0.1", port="8000",
+                 APIPY=False):
         """
         :param proto: http or https
         :param host: Hostname or IP address of Cuckoo server
