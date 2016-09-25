@@ -1,6 +1,7 @@
 # Build Status
 
 | Master | Devel |
+|--------|-------|
 | [![Build Status](https://travis-ci.org/keithjjones/cuckoo-modified-api.svg?branch=master)](https://travis-ci.org/keithjjones/cuckoo-modified-api) | [![Build Status](https://travis-ci.org/keithjjones/cuckoo-modified-api.svg?branch=devel)](https://travis-ci.org/keithjjones/cuckoo-modified-api) |
 
 
