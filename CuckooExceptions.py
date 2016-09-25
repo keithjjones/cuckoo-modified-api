@@ -56,3 +56,12 @@ class CuckooAPINoVM(Exception):
     def __init__(self, vmname):
         Exception.__init__(self, "CuckooAPI:  VM {0} not available or valid!"
                            .format(vmname))
+
+
+class CuckooAPINoTaskID(Exception):
+    """
+    Exception for when an invalid task ID is used.
+    """
+    def __init__(self, taskid):
+        Exception.__init__(self, "CuckooAPI:  Task ID {0} not avilable or "
+                           "valid!".format(taskid))

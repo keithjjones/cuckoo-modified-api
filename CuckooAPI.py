@@ -172,6 +172,27 @@ class CuckooAPI(object):
         else:
             raise CuckooExceptions.CuckooAPIBadRequest(apiurl)
 
+    def taskview(self, taskid=None):
+        """
+        View the task for the task ID.
+        :param taskid: The ID of the task to view.
+        :results : Returns a dict of task details.
+        """
+        # Build the URL
+        if taskid is None:
+            raise CuckooExceptions.CuckooAPINoTaskID(taskid)
+
+        apiurl = buildapiurl(self.proto, self.host, self.port,
+                             "/tasks/view/"+str(taskid), self.APIPY)
+
+        request = requests.get(apiurl)
+
+        # ERROR CHECK request.status_code!
+        if request.status_code == 200:
+            jsonreply = json.loads(request.text)
+            return jsonreply
+        else:
+            raise CuckooExceptions.CuckooAPIBadRequest(apiurl)
 
 #
 # Call main if run as a script
