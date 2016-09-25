@@ -62,7 +62,9 @@ class CuckooAPI(object):
         :param filepath: Path to a file to submit.
         :param data: This is data containing any other options for the
         submission form.  This is a dict of values accepted by the
-        create file options in the cuckoo-modified API.
+        create file options in the cuckoo-modified API.  More form information
+        can be found int the following link:
+        https://github.com/spender-sandbox/cuckoo-modified/blob/master/docs/book/src/usage/api.rst
         :results : Returns the json results of the submission
         """
         # Error if the file does not exist
