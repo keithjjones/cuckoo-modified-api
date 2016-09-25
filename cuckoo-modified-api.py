@@ -15,7 +15,7 @@ def main():
 
 
 #
-# API Stubs
+# API functions
 #
 def filecreate():
     """
