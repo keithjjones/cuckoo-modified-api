@@ -1,4 +1,5 @@
 Master Branch:  [![Build Status](https://travis-ci.org/keithjjones/cuckoo-modified-api.svg?branch=master)](https://travis-ci.org/keithjjones/cuckoo-modified-api)
+Devel Branch:  [![Build Status](https://travis-ci.org/keithjjones/cuckoo-modified-api.svg?branch=devel)](https://travis-ci.org/keithjjones/cuckoo-modified-api)
 
 # cuckoo-modified-api
 A Python library to interface with a cuckoo-modified instance
