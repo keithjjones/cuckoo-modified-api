@@ -166,3 +166,61 @@ def test_listmachines_ok_apipy(mock_get):
     response = api.listmachines()
 
     assert response == {}
+
+@mock.patch('CuckooAPI.requests.get')
+def test_viewmachine_exception(mock_get):
+    """
+    Test a pretend view machine with exceptions
+    """
+    mock_get.return_value.status_code = 404
+
+    api = CuckooAPI.CuckooAPI()
+
+    ExceptionThrown = False
+
+    try:
+        api.viewmachine()
+    except CuckooAPI.CuckooExceptions.CuckooAPINoVM:
+        ExceptionThrown = True
+
+    assert ExceptionThrown is True
+
+    ExceptionThrown = False
+
+    try:
+        api.viewmachine("cuckoo1")
+    except CuckooAPI.CuckooExceptions.CuckooAPIBadRequest:
+        ExceptionThrown = True
+
+    assert ExceptionThrown is True
+
+
+
+@mock.patch('CuckooAPI.requests.get')
+def test_viewmachine_ok_noapipy(mock_get):
+    """
+    Test a pretend view machine without api.py
+    """
+    mock_get.return_value.status_code = 200
+    mock_get.return_value.text = '{}'
+
+    api = CuckooAPI.CuckooAPI()
+
+    response = api.viewmachine('cuckoo1')
+
+    assert response == {}
+
+
+@mock.patch('CuckooAPI.requests.get')
+def test_viewmachine_ok_apipy(mock_get):
+    """
+    Test a pretend view machine with api.py
+    """
+    mock_get.return_value.status_code = 200
+    mock_get.return_value.text = '{}'
+
+    api = CuckooAPI.CuckooAPI(port=8090, APIPY=True)
+
+    response = api.viewmachine('cuckoo1')
+
+    assert response == {}

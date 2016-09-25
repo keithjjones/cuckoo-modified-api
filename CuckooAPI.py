@@ -125,6 +125,27 @@ class CuckooAPI(object):
         else:
             raise CuckooExceptions.CuckooAPIBadRequest(apiurl)
 
+    def viewmachine(self, vmname=None):
+        """
+        Lists the details about an analysis machine.
+        :param vmname: The vm name for the machine to be listed
+        :results : Returns the dictionary of the machine specifics
+        """
+        # Build the URL
+        if vmname is None:
+            raise CuckooExceptions.CuckooAPINoVM(vmname)
+
+        apiurl = buildapiurl(self.proto, self.host, self.port,
+                             "/machines/view/"+vmname, self.APIPY)
+        request = requests.get(apiurl)
+
+        # ERROR CHECK request.status_code!
+        if request.status_code == 200:
+            jsonreply = json.loads(request.text)
+            return jsonreply
+        else:
+            raise CuckooExceptions.CuckooAPIBadRequest(apiurl)
+
 #
 # Call main if run as a script
 #

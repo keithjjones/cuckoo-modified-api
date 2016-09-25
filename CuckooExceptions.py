@@ -47,3 +47,12 @@ class CuckooAPIBadRequest(Exception):
                            "calls from Django web interface with the "
                            "api.py interface?  Or the other way "
                            "around?".format(apiurl))
+
+
+class CuckooAPINoVM(Exception):
+    """
+    Exception for when a vm is not found.
+    """
+    def __init__(self, vmname):
+        Exception.__init__(self, "CuckooAPI:  VM {0} not available or valid!"
+                           .format(vmname))
