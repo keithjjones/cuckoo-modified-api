@@ -56,7 +56,7 @@ class CuckooAPI(object):
         self.port = port
         self.APIPY = APIPY
 
-    def filecreate(self, filepath):
+    def submitfile(self, filepath):
         """
         Function to submit a local file to Cuckoo for analysis.
         :param filepath: Path to a file to submit.
