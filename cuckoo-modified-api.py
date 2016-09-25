@@ -18,6 +18,20 @@ def main():
 
 
 #
+# Static Functions
+#
+def buildapiurl(proto="https", host="127.0.0.1", port="8000", action="/tasks/create/file"):
+    """
+    Create a URL for the Cuckoo API
+    :param proto: http or https
+    :param host: Hostname or IP address
+    :param port: The port of the Cuckoo API server
+    :param action: The action to perform with the API
+    """
+    return "{0}://{1}:{2}{3}/api/{4}".format(proto, host, port, action)
+
+
+#
 # Classes
 #
 class CuckooAPI(object):
@@ -45,8 +59,9 @@ class CuckooAPI(object):
             raise CuckooExceptions.CuckooFileNotFoundException
 
         # Build the URL
-        apiurl = "{0}://{1}:{2}{3}".format(self.proto, self.host, self.port,
-                                           "/api/tasks/create/file/")
+        apiurl = buildapiurl(self.proto, self.host, self.port,
+                                           "/tasks/create/file/")
+
 
 #
 # Call main if run as a script
