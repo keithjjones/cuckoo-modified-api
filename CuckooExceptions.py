@@ -42,5 +42,5 @@ class CuckooAPIMachineNotFound(Exception):
     Exception for when a Cuckoo machine is not found.
     """
     def __init__(self, host):
-        Exception.__init__(self, "CuckooAPI:  Machine"
-                           " not found: {0}".format(host))
+        Exception.__init__(self, "CuckooAPI:  Unable to connect "
+                           "to: {0}".format(host))

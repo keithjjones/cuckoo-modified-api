@@ -22,7 +22,7 @@ def main():
 # Static Functions
 #
 def buildapiurl(proto="http", host="127.0.0.1", port=8000,
-                action=None):
+                action=None, APIPY=False):
     """
     Create a URL for the Cuckoo API
     :param proto: http or https
@@ -33,7 +33,10 @@ def buildapiurl(proto="http", host="127.0.0.1", port=8000,
     if action is None:
         return None
     else:
-        return "{0}://{1}:{2}{3}".format(proto, host, port, action)
+        if APIPY is True:
+            return "{0}://{1}:{2}{3}".format(proto, host, port, action)
+        else:
+            return "{0}://{1}:{2}/api/{3}/".format(proto, host, port, action)
 
 
 #
@@ -73,12 +76,8 @@ class CuckooAPI(object):
             raise CuckooExceptions.CuckooAPIInvalidFileException(filepath)
 
         # Build the URL
-        if self.APIPY is True:
-            apiurl = buildapiurl(self.proto, self.host, self.port,
-                                 "/tasks/create/file")
-        else:
-            apiurl = buildapiurl(self.proto, self.host, self.port,
-                                 "/api/tasks/create/file/")
+        apiurl = buildapiurl(self.proto, self.host, self.port,
+                             "/tasks/create/file", self.APIPY)
 
         with open(filepath, "rb") as sample:
             multipart_file = {"file": ("temp_file_name", sample)}
@@ -89,20 +88,34 @@ class CuckooAPI(object):
             jsonreply = json.loads(request.text)
             return jsonreply
         else:
-            return None
+            raise CuckooExceptions.CuckooAPIMachineNotFound(self.host)
 
     def getcuckoostatus(self):
         """
         Function to get the status of the Cuckoo instance.
+        :results : Returns the status as a dictionary.
         """
         # Build the URL
-        if self.APIPY is True:
-            apiurl = buildapiurl(self.proto, self.host, self.port,
-                                 "/cuckoo/status")
-        else:
-            apiurl = buildapiurl(self.proto, self.host, self.port,
-                                 "/api/cuckoo/status/")
+        apiurl = buildapiurl(self.proto, self.host, self.port,
+                             "/cuckoo/status", self.APIPY)
 
+        request = requests.get(apiurl)
+
+        # ERROR CHECK request.status_code!
+        if request.status_code == 200:
+            jsonreply = json.loads(request.text)
+            return jsonreply
+        else:
+            raise CuckooExceptions.CuckooAPIMachineNotFound(self.host)
+
+    def listmachines(self):
+        """
+        Lists the machines available for analysis.
+        :results : Returns the list of machines as a list.
+        """
+        # Build the URL
+        apiurl = buildapiurl(self.proto, self.host, self.port,
+                             "/cuckoo/status", self.APIPY)
         request = requests.get(apiurl)
 
         # ERROR CHECK request.status_code!
