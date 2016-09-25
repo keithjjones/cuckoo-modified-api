@@ -21,8 +21,8 @@ def main():
 #
 # Static Functions
 #
-def buildapiurl(proto="https", host="127.0.0.1", port="8000",
-                action="/tasks/create/file"):
+def buildapiurl(proto="http", host="127.0.0.1", port="8000",
+                action=None):
     """
     Create a URL for the Cuckoo API
     :param proto: http or https
@@ -30,7 +30,10 @@ def buildapiurl(proto="https", host="127.0.0.1", port="8000",
     :param port: The port of the Cuckoo API server
     :param action: The action to perform with the API
     """
-    return "{0}://{1}:{2}/api/{3}".format(proto, host, port, action)
+    if action is None:
+        return None
+    else:
+        return "{0}://{1}:{2}{3}".format(proto, host, port, action)
 
 
 #
@@ -40,15 +43,17 @@ class CuckooAPI(object):
     """
     Class to hold Cuckoo API data.
     """
-    def __init__(self, proto="https", host="127.0.0.1", port="8000"):
+    def __init__(self, proto="http", host="127.0.0.1", port="8000", APIPY=False):
         """
         :param proto: http or https
         :param host: Hostname or IP address of Cuckoo server
         :param port: The port of the Cuckoo server
+        :param APIPY: Set to true to submit to api.py on the server
         """
         self.proto = proto
         self.host = host
         self.port = port
+        self.APIPY = APIPY
 
     def filecreate(self, filepath):
         """
@@ -62,17 +67,23 @@ class CuckooAPI(object):
             raise CuckooExceptions.CuckooInvalidFileException(filepath)
 
         # Build the URL
-        apiurl = buildapiurl(self.proto, self.host, self.port,
-                             "/tasks/create/file/")
+        if self.APIPY is True:
+            apiurl = buildapiurl(self.proto, self.host, self.port,
+                                 "/tasks/create/file")
+        else:
+            apiurl = buildapiurl(self.proto, self.host, self.port,
+                                 "/api/tasks/create/file/")
 
         with open(filepath, "rb") as sample:
             multipart_file = {"file": ("temp_file_name", sample)}
             request = requests.post(apiurl, files=multipart_file)
 
         # ERROR CHECK request.status_code!
-
-        jsonreply = json.loads(request.text)
-        return jsonreply
+        if request.status_code == 200:
+            jsonreply = json.loads(request.text)
+            return jsonreply
+        else:
+            return None
 
 
 #
