@@ -10,6 +10,7 @@ def main():
     """
     Main function for this library
     """
+    print("This is a library and not a script.  It cannot be run as a script.")
     pass
 
 
