@@ -331,3 +331,70 @@ def test_taskview_ok_apipy(mock_get):
     response = api.taskview(1)
 
     assert response == {}
+
+
+@mock.patch('CuckooAPI.requests.get')
+def test_taskreport_exception(mock_get):
+    """
+    Test a pretend task report with exception
+    """
+    mock_get.return_value.status_code = 404
+
+    api = CuckooAPI.CuckooAPI()
+
+    ExceptionThrown = False
+
+    try:
+        api.taskreport()
+    except CuckooAPI.CuckooExceptions.CuckooAPINoTaskID:
+        ExceptionThrown = True
+
+    assert ExceptionThrown is True
+
+    ExceptionThrown = False
+
+    try:
+        api.taskreport(1, 'html')
+    except CuckooAPI.CuckooExceptions.CuckooAPINotImplemented:
+        ExceptionThrown = True
+
+    assert ExceptionThrown is True
+
+    ExceptionThrown = False
+
+    try:
+        api.taskreport(1)
+    except CuckooAPI.CuckooExceptions.CuckooAPIBadRequest:
+        ExceptionThrown = True
+
+    assert ExceptionThrown is True
+
+
+@mock.patch('CuckooAPI.requests.get')
+def test_taskreport_ok_noapipy(mock_get):
+    """
+    Test a pretend task report without api.py
+    """
+    mock_get.return_value.status_code = 200
+    mock_get.return_value.text = '{}'
+
+    api = CuckooAPI.CuckooAPI()
+
+    response = api.taskreport(1)
+
+    assert response == {}
+
+
+@mock.patch('CuckooAPI.requests.get')
+def test_taskreport_ok_apipy(mock_get):
+    """
+    Test a pretend task report with api.py
+    """
+    mock_get.return_value.status_code = 200
+    mock_get.return_value.text = '{}'
+
+    api = CuckooAPI.CuckooAPI(port=8090, APIPY=True)
+
+    response = api.taskreport(1)
+
+    assert response == {}

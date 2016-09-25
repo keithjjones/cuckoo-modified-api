@@ -179,7 +179,7 @@ class CuckooAPI(object):
         :results : Returns a dict of task details.
         """
         # Build the URL
-        if taskid is None:
+        if taskid is None or taskid < 1:
             raise CuckooExceptions.CuckooAPINoTaskID(taskid)
 
         apiurl = buildapiurl(self.proto, self.host, self.port,
@@ -193,6 +193,40 @@ class CuckooAPI(object):
             return jsonreply
         else:
             raise CuckooExceptions.CuckooAPIBadRequest(apiurl)
+
+    def taskreport(self, taskid=None, reportformat="json"):
+        """
+        View the report for the task ID.
+        :param taskid: The ID of the task to report.
+        :param reportformat: Right now only json is supported.
+        :results : Returns a dict report for the task.
+        """
+        # Build the URL
+        if taskid is None or taskid < 1:
+            raise CuckooExceptions.CuckooAPINoTaskID(taskid)
+
+        if self.APIPY is True:
+            apiurl = buildapiurl(self.proto, self.host, self.port,
+                                 "/tasks/report/"+str(taskid)+"/"+reportformat,
+                                 self.APIPY)
+        else:
+            apiurl = buildapiurl(self.proto, self.host, self.port,
+                                 "/tasks/get/report/"+str(taskid)+"/" +
+                                 reportformat, self.APIPY)
+
+        # Error on any other format for now...
+        if reportformat != "json":
+            raise CuckooExceptions.CuckooAPINotImplemented(apiurl)
+
+        request = requests.get(apiurl)
+
+        # ERROR CHECK request.status_code!
+        if request.status_code == 200:
+            jsonreply = json.loads(request.text)
+            return jsonreply
+        else:
+            raise CuckooExceptions.CuckooAPIBadRequest(apiurl)
+
 
 #
 # Call main if run as a script
