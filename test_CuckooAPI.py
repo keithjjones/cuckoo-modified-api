@@ -26,7 +26,7 @@ def test_submitfile_ok_noapipy(mock_get):
 
     api = CuckooAPI.CuckooAPI()
 
-    response = api.submitfile('Readme.md')
+    response = api.submitfile('README.md')
 
     assert response['url'][0] == "http://example.tld/submit/status/14/"
     assert response['data']['task_ids'][0] == 14
@@ -39,6 +39,6 @@ def test_submitfile_ok_apipy(mock_get):
 
     api = CuckooAPI.CuckooAPI(port=8090, APIPY=True)
 
-    response = api.submitfile('Readme.md')
+    response = api.submitfile('README.md')
 
     assert response['task_ids'][0] == 14
