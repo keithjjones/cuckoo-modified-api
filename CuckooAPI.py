@@ -56,10 +56,13 @@ class CuckooAPI(object):
         self.port = port
         self.APIPY = APIPY
 
-    def submitfile(self, filepath):
+    def submitfile(self, filepath, data=None):
         """
         Function to submit a local file to Cuckoo for analysis.
         :param filepath: Path to a file to submit.
+        :param data: This is data containing any other options for the
+        submission form.  This is a dict of values accepted by the
+        create file options in the cuckoo-modified API.
         :results : Returns the json results of the submission
         """
         # Error if the file does not exist
@@ -77,7 +80,7 @@ class CuckooAPI(object):
 
         with open(filepath, "rb") as sample:
             multipart_file = {"file": ("temp_file_name", sample)}
-            request = requests.post(apiurl, files=multipart_file)
+            request = requests.post(apiurl, files=multipart_file, data=data)
 
         # ERROR CHECK request.status_code!
         if request.status_code == 200:
