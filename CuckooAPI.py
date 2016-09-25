@@ -146,6 +146,33 @@ class CuckooAPI(object):
         else:
             raise CuckooExceptions.CuckooAPIBadRequest(apiurl)
 
+    def taskslist(self, limit=None, offset=None):
+        """
+        Lists the tasks in the Cuckoo DB.
+        :param limit: Limit to this many results (Optional)
+        :param offset: Offset the output to offset in the total task list
+        and requires limit above. (Optional)
+        :results : Returns a list of task details.
+        """
+        # Build the URL
+        baseurl = "/tasks/list"
+        if limit is not None:
+            baseurl = baseurl+"/"+str(limit)
+            if offset is not None:
+                baseurl = baseurl+"/"+str(offset)
+
+        apiurl = buildapiurl(self.proto, self.host, self.port,
+                             baseurl, self.APIPY)
+        request = requests.get(apiurl)
+
+        # ERROR CHECK request.status_code!
+        if request.status_code == 200:
+            jsonreply = json.loads(request.text)
+            return jsonreply
+        else:
+            raise CuckooExceptions.CuckooAPIBadRequest(apiurl)
+
+
 #
 # Call main if run as a script
 #
