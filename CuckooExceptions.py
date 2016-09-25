@@ -6,12 +6,13 @@
 #
 # Classes
 #
-class CuckooInvalidFileException(Exception):
+class CuckooAPIInvalidFileException(Exception):
     """
     Exception for when a file is not found.
     """
     def __init__(self, filepath):
-        Exception.__init__(self, "Cuckoo: Invalid File {0}".format(filepath))
+        Exception.__init__(self, "CuckooAPI: Invalid File {0}".format(
+                           filepath))
 
 
 class CuckooAPINotImplemented(Exception):
@@ -31,6 +32,15 @@ class CuckooAPINotAvailable(Exception):
     """
     def __init__(self, apicall):
         Exception.__init__(self, "CuckooAPI: This API is not available for "
-                                 "your target Cuckoo server.  Are you mixing "
-                                 "calls from Django web interface with the "
-                                 "api.py interface?  Or the other way around?")
+                           "your target Cuckoo server.  Are you mixing "
+                           "calls from Django web interface with the "
+                           "api.py interface?  Or the other way around?")
+
+
+class CuckooAPIMachineNotFound(Exception):
+    """
+    Exception for when a Cuckoo machine is not found.
+    """
+    def __init__(self, host):
+        Exception.__init__(self, "CuckooAPI:  Machine"
+                           " not found: {0}".format(host))

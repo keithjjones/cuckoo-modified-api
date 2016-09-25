@@ -70,7 +70,7 @@ class CuckooAPI(object):
         # Error if the file does not exist
         if (filepath is None or not os.path.exists(filepath) or
                 not os.path.isfile(filepath)):
-            raise CuckooExceptions.CuckooInvalidFileException(filepath)
+            raise CuckooExceptions.CuckooAPIInvalidFileException(filepath)
 
         # Build the URL
         if self.APIPY is True:
@@ -91,6 +91,26 @@ class CuckooAPI(object):
         else:
             return None
 
+    def getcuckoostatus(self):
+        """
+        Function to get the status of the Cuckoo instance.
+        """
+        # Build the URL
+        if self.APIPY is True:
+            apiurl = buildapiurl(self.proto, self.host, self.port,
+                                 "/cuckoo/status")
+        else:
+            apiurl = buildapiurl(self.proto, self.host, self.port,
+                                 "/api/cuckoo/status/")
+
+        request = requests.get(apiurl)
+
+        # ERROR CHECK request.status_code!
+        if request.status_code == 200:
+            jsonreply = json.loads(request.text)
+            return jsonreply
+        else:
+            raise CuckooExceptions.CuckooAPIMachineNotFound(self.host)
 
 #
 # Call main if run as a script
