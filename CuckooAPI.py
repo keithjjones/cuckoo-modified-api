@@ -21,7 +21,7 @@ def main():
 #
 # Static Functions
 #
-def buildapiurl(proto="http", host="127.0.0.1", port="8000",
+def buildapiurl(proto="http", host="127.0.0.1", port=8000,
                 action=None):
     """
     Create a URL for the Cuckoo API
@@ -43,12 +43,12 @@ class CuckooAPI(object):
     """
     Class to hold Cuckoo API data.
     """
-    def __init__(self, proto="http", host="127.0.0.1", port="8000",
+    def __init__(self, host="127.0.0.1", port=8000, proto="http",
                  APIPY=False):
         """
-        :param proto: http or https
         :param host: Hostname or IP address of Cuckoo server
         :param port: The port of the Cuckoo server
+        :param proto: http or https
         :param APIPY: Set to true to submit to api.py on the server
         """
         self.proto = proto
