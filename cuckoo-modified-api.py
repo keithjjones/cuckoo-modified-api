@@ -1,6 +1,9 @@
 #
 # Imports
 #
+import requests
+import os
+import CuckooExceptions
 
 
 #
@@ -15,13 +18,35 @@ def main():
 
 
 #
-# API functions
+# Classes
 #
-def filecreate():
+class CuckooAPI(object):
     """
-    Add a file to Cuckoo for analysis.
+    Class to hold Cuckoo API data.
     """
-    pass
+    def __init(self, proto="https", host="127.0.0.1", port="8000"):
+        """
+        :param proto: http or https
+        :param host: Hostname or IP address of Cuckoo server
+        :param port: The port of the Cuckoo server
+        """
+        self.proto = proto
+        self.host = host
+        self.port = port
+
+    def filecreate(self, filepath):
+        """
+        Function to submit a local file to Cuckoo for analysis.
+        :param filepath: Path to a file to submit.
+        :results : Return the task ID of the submission
+        """
+        # Error if the file does not exist
+        if filepath is None or not os.path.exists(filepath):
+            raise CuckooExceptions.CuckooFileNotFoundException
+
+        # Build the URL
+        apiurl = "{0}://{1}:{2}{3}".format(self.proto, self.host, self.port,
+                                           "/api/tasks/create/file/")
 
 #
 # Call main if run as a script
