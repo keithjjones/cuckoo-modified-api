@@ -291,8 +291,13 @@ class CuckooAPI(object):
         """
         Download screenshot(s).
         :param taskid: The task ID for the screenshot(s).
-        :param filepath: Where to save the screenshot(s).  The screenshots
-        are saved as .tar.bz!  Be sure to reflect this in your filepath!
+        :param filepath: Where to save the screenshot(s).
+        If you are using the Django web api the screenshots
+        are saved as .tar.bz!
+        If you are using the api.py script the screenshots are in .zip
+        format.
+        This function adds the apppropriate file extensions to the
+        filepath variable.
         :param screenshot: The screenshot number to download.
         :returns : Nothing
         """
@@ -301,6 +306,11 @@ class CuckooAPI(object):
 
         if filepath is None or os.path.exists(filepath):
             raise CuckooExceptions.CuckooAPIFileExists(filepath)
+
+        if self.APIPY is True:
+            filepath = filepath+".zip"
+        else:
+            filepath = filepath+".tar.bz"
 
         if self.APIPY is True:
             baseurl = "/tasks/screenshots/"+str(taskid)
