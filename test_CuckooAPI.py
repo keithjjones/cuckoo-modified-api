@@ -465,3 +465,81 @@ def test_fileview_ok_apipy(mock_get):
     response = api.fileview('1', 'sha256')
 
     assert response == {}
+
+
+@mock.patch('CuckooAPI.requests.get')
+def test_taskdelete_exception(mock_get):
+    """
+    Test a pretend task delete with exception
+    """
+    mock_get.return_value.status_code = 404
+
+    api = CuckooAPI.CuckooAPI()
+
+    ExceptionThrown = False
+
+    try:
+        api.taskdelete()
+    except CuckooAPI.CuckooExceptions.CuckooAPINoTaskID:
+        ExceptionThrown = True
+
+    assert ExceptionThrown is True
+
+    ExceptionThrown = False
+
+    try:
+        api.taskdelete(1)
+    except CuckooAPI.CuckooExceptions.CuckooAPINoTaskID:
+        ExceptionThrown = True
+
+    assert ExceptionThrown is True
+
+    ExceptionThrown = False
+
+    mock_get.return_value.status_code = 500
+
+    try:
+        api.taskdelete(1)
+    except CuckooAPI.CuckooExceptions.CuckooAPITaskNoDelete:
+        ExceptionThrown = True
+
+    assert ExceptionThrown is True
+
+    mock_get.return_value.status_code = 400
+
+    try:
+        api.taskdelete(1)
+    except CuckooAPI.CuckooExceptions.CuckooAPIBadRequest:
+        ExceptionThrown = True
+
+    assert ExceptionThrown is True
+
+
+@mock.patch('CuckooAPI.requests.get')
+def test_taskdelete_ok_noapipy(mock_get):
+    """
+    Test a pretend task delete without api.py
+    """
+    mock_get.return_value.status_code = 200
+    mock_get.return_value.text = '{}'
+
+    api = CuckooAPI.CuckooAPI()
+
+    response = api.taskdelete(1)
+
+    assert response == {}
+
+
+@mock.patch('CuckooAPI.requests.get')
+def test_taskdelete_ok_apipy(mock_get):
+    """
+    Test a pretend task delete with api.py
+    """
+    mock_get.return_value.status_code = 200
+    mock_get.return_value.text = '{}'
+
+    api = CuckooAPI.CuckooAPI(port=8090, APIPY=True)
+
+    response = api.taskdelete(1)
+
+    assert response == {}

@@ -68,7 +68,7 @@ class CuckooAPI(object):
         create file options in the cuckoo-modified API.  More form information
         can be found int the following link:
         https://github.com/spender-sandbox/cuckoo-modified/blob/master/docs/book/src/usage/api.rst
-        :results : Returns the json results of the submission
+        :returns : Returns the json results of the submission
         """
         # Error if the file does not exist
         if (filepath is None or not os.path.exists(filepath) or
@@ -93,7 +93,7 @@ class CuckooAPI(object):
     def getcuckoostatus(self):
         """
         Function to get the status of the Cuckoo instance.
-        :results : Returns the status as a dictionary.
+        :returns : Returns the status as a dictionary.
         """
         # Build the URL
         apiurl = buildapiurl(self.proto, self.host, self.port,
@@ -111,7 +111,7 @@ class CuckooAPI(object):
     def listmachines(self):
         """
         Lists the machines available for analysis.
-        :results : Returns the list of machines as a list.
+        :returns : Returns the list of machines as a list.
         """
         # Build the URL
         apiurl = buildapiurl(self.proto, self.host, self.port,
@@ -129,7 +129,7 @@ class CuckooAPI(object):
         """
         Lists the details about an analysis machine.
         :param vmname: The vm name for the machine to be listed
-        :results : Returns the dictionary of the machine specifics
+        :returns : Returns the dictionary of the machine specifics
         """
         # Build the URL
         if vmname is None:
@@ -152,7 +152,7 @@ class CuckooAPI(object):
         :param limit: Limit to this many results (Optional)
         :param offset: Offset the output to offset in the total task list
         and requires limit above. (Optional)
-        :results : Returns a list of task details.
+        :returns : Returns a list of task details.
         """
         # Build the URL
         baseurl = "/tasks/list"
@@ -176,7 +176,7 @@ class CuckooAPI(object):
         """
         View the task for the task ID.
         :param taskid: The ID of the task to view.
-        :results : Returns a dict of task details.
+        :returns : Returns a dict of task details.
         """
         # Build the URL
         if taskid is None or taskid < 1:
@@ -199,7 +199,7 @@ class CuckooAPI(object):
         View the report for the task ID.
         :param taskid: The ID of the task to report.
         :param reportformat: Right now only json is supported.
-        :results : Returns a dict report for the task.
+        :returns : Returns a dict report for the task.
         """
         # Build the URL
         if taskid is None or taskid < 1:
@@ -234,7 +234,7 @@ class CuckooAPI(object):
         :param hashtype: The following types of hash:
         'taskid', 'md5', 'sha256'.  Any other values will cause
         an error!
-        :results : Returns the results of the file in a dict.
+        :returns : Returns the results of the file in a dict.
         """
         # Build the URL
         if hashid is None:
@@ -260,6 +260,33 @@ class CuckooAPI(object):
             return jsonreply
         else:
             raise CuckooExceptions.CuckooAPIBadRequest(apiurl)
+
+    def taskdelete(self, taskid=None):
+        """
+        Delete a task.
+        :param taskid: The task ID to delete.
+        :returns : Nothing
+        """
+        if taskid is None or taskid < 1:
+            raise CuckooExceptions.CuckooAPINoTaskID(taskid)
+
+        apiurl = buildapiurl(self.proto, self.host, self.port,
+                             "/tasks/delete/"+str(taskid),
+                             self.APIPY)
+
+        request = requests.get(apiurl)
+
+        # ERROR CHECK request.status_code!
+        if request.status_code == 200:
+            jsonreply = json.loads(request.text)
+            return jsonreply
+        elif request.status_code == 404:
+            raise CuckooExceptions.CuckooAPINoTaskID(taskid)
+        elif request.status_code == 500:
+            raise CuckooExceptions.CuckooAPITaskNoDelete(taskid)
+        else:
+            raise CuckooExceptions.CuckooAPIBadRequest(apiurl)
+
 
 #
 # Call main if run as a script

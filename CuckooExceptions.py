@@ -54,7 +54,7 @@ class CuckooAPINoVM(Exception):
     Exception for when a vm is not found.
     """
     def __init__(self, vmname):
-        Exception.__init__(self, "CuckooAPI:  VM {0} not available or valid!"
+        Exception.__init__(self, "CuckooAPI:  VM {0} not available or invalid!"
                            .format(vmname))
 
 
@@ -64,7 +64,16 @@ class CuckooAPINoTaskID(Exception):
     """
     def __init__(self, taskid):
         Exception.__init__(self, "CuckooAPI:  Task ID {0} not avilable or "
-                           "valid!".format(taskid))
+                           "invalid!".format(taskid))
+
+
+class CuckooAPITaskNoDelete(Exception):
+    """
+    Exception for when a task cannot be deleted.
+    """
+    def __init__(self, taskid):
+        Exception.__init__(self, "CuckooAPI: Task ID {0} cannot be "
+                           "deleted!".format(taskid))
 
 
 class CuckooAPINoHash(Exception):
@@ -73,4 +82,4 @@ class CuckooAPINoHash(Exception):
     """
     def __init__(self, hashid, hashtype):
         Exception.__init__(self, "CuckooAPI:  Hash {0} of type {1} not "
-                           "available or valid!".format(hashid, hashtype))
+                           "available or invalid!".format(hashid, hashtype))

@@ -39,6 +39,9 @@ Documentation can be found at the following links:
   	- https://realpython.com/blog/python/testing-third-party-apis-with-mocks/
   - Nose2 testing library:
   	- http://nose2.readthedocs.io/en/latest/
+  - Setup information:
+  	- http://stackoverflow.com/questions/14399534/how-can-i-reference-requirements-txt-for-the-install-requires-kwarg-in-setuptool
+  	- http://the-hitchhikers-guide-to-packaging.readthedocs.io/en/latest/creation.html
 
 # License:
 
