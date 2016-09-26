@@ -59,62 +59,6 @@ class CuckooAPI(object):
         self.port = port
         self.APIPY = APIPY
 
-    def submitfile(self, filepath, data=None):
-        """
-        Function to submit a local file to Cuckoo for analysis.
-        :param filepath: Path to a file to submit.
-        :param data: This is data containing any other options for the
-        submission form.  This is a dict of values accepted by the
-        create file options in the cuckoo-modified API.  More form information
-        can be found in the following link:
-        https://github.com/spender-sandbox/cuckoo-modified/blob/master/docs/book/src/usage/api.rst
-        :returns : Returns the json results of the submission
-        """
-        # Error if the file does not exist
-        if (filepath is None or not os.path.exists(filepath) or
-                not os.path.isfile(filepath)):
-            raise CuckooExceptions.CuckooAPIInvalidFileException(filepath)
-
-        # Build the URL
-        apiurl = buildapiurl(self.proto, self.host, self.port,
-                             "/tasks/create/file", self.APIPY)
-
-        with open(filepath, "rb") as sample:
-            multipart_file = {"file": ("temp_file_name", sample)}
-            request = requests.post(apiurl, files=multipart_file, data=data)
-
-        # ERROR CHECK request.status_code!
-        if request.status_code == 200:
-            jsonreply = json.loads(request.text)
-            return jsonreply
-        else:
-            raise CuckooExceptions.CuckooAPIBadRequest(apiurl)
-
-    def submiturl(self, url, data=None):
-        """
-        Function to submit a URL to Cuckoo for analysis.
-        :param url: URL to submit.
-        :param data: This is data containing any other options for the
-        submission form.  This is a dict of values accepted by the
-        create file options in the cuckoo-modified API.  More form information
-        can be found in the following link:
-        https://github.com/spender-sandbox/cuckoo-modified/blob/master/docs/book/src/usage/api.rst
-        :returns : Returns the json results of the submission
-        """
-        # Build the URL
-        apiurl = buildapiurl(self.proto, self.host, self.port,
-                             "/tasks/create/url", self.APIPY)
-
-        multipart_url = {"url": ("", url)}
-        request = requests.post(apiurl, files=multipart_url, data=data)
-
-        # ERROR CHECK request.status_code!
-        if request.status_code == 200:
-            jsonreply = json.loads(request.text)
-            return jsonreply
-        else:
-            raise CuckooExceptions.CuckooAPIBadRequest(apiurl)
-
     def getcuckoostatus(self):
         """
         Function to get the status of the Cuckoo instance.
@@ -252,43 +196,6 @@ class CuckooAPI(object):
         else:
             raise CuckooExceptions.CuckooAPIBadRequest(apiurl)
 
-    def fileview(self, hashid=None, hashtype=None):
-        """
-        View the details for the file given the hash.
-        :param hashid: The hash or task ID to search.
-        :param hashtype: The following types of hash:
-        'taskid', 'md5', 'sha256'.  Any other values will cause
-        an error!
-        :returns : Returns the results of the file in a dict.
-        """
-        if hashid is None:
-            raise CuckooExceptions.CuckooAPINoHash(hashid, hashtype)
-
-        # Get rid of ints
-        hashid = str(hashid)
-
-        # Build the URL
-        apiurl = buildapiurl(self.proto, self.host, self.port,
-                             "/files/view/"+hashtype+"/"+hashid,
-                             self.APIPY)
-
-        # This appears to be unavailable in the documentation...
-        if self.APIPY is True and hashtype == "sha1":
-            raise CuckooExceptions.CuckooAPINotAvailable(apiurl)
-
-        # This appears to be unavailable in the documentation...
-        if hashtype != "md5" and hashtype != "sha1" and hashtype != "sha256":
-            raise CuckooExceptions.CuckooAPINotAvailable(apiurl)
-
-        request = requests.get(apiurl)
-
-        # ERROR CHECK request.status_code!
-        if request.status_code == 200:
-            jsonreply = json.loads(request.text)
-            return jsonreply
-        else:
-            raise CuckooExceptions.CuckooAPIBadRequest(apiurl)
-
     def taskdelete(self, taskid=None):
         """
         Delete a task.
@@ -363,6 +270,99 @@ class CuckooAPI(object):
                 for chunk in request.iter_content(chunk_size=1024):
                     if chunk:
                         f.write(chunk)
+        else:
+            raise CuckooExceptions.CuckooAPIBadRequest(apiurl)
+
+    def submitfile(self, filepath, data=None):
+        """
+        Function to submit a local file to Cuckoo for analysis.
+        :param filepath: Path to a file to submit.
+        :param data: This is data containing any other options for the
+        submission form.  This is a dict of values accepted by the
+        create file options in the cuckoo-modified API.  More form information
+        can be found in the following link:
+        https://github.com/spender-sandbox/cuckoo-modified/blob/master/docs/book/src/usage/api.rst
+        :returns : Returns the json results of the submission
+        """
+        # Error if the file does not exist
+        if (filepath is None or not os.path.exists(filepath) or
+                not os.path.isfile(filepath)):
+            raise CuckooExceptions.CuckooAPIInvalidFileException(filepath)
+
+        # Build the URL
+        apiurl = buildapiurl(self.proto, self.host, self.port,
+                             "/tasks/create/file", self.APIPY)
+
+        with open(filepath, "rb") as sample:
+            multipart_file = {"file": ("temp_file_name", sample)}
+            request = requests.post(apiurl, files=multipart_file, data=data)
+
+        # ERROR CHECK request.status_code!
+        if request.status_code == 200:
+            jsonreply = json.loads(request.text)
+            return jsonreply
+        else:
+            raise CuckooExceptions.CuckooAPIBadRequest(apiurl)
+
+    def submiturl(self, url, data=None):
+        """
+        Function to submit a URL to Cuckoo for analysis.
+        :param url: URL to submit.
+        :param data: This is data containing any other options for the
+        submission form.  This is a dict of values accepted by the
+        create file options in the cuckoo-modified API.  More form information
+        can be found in the following link:
+        https://github.com/spender-sandbox/cuckoo-modified/blob/master/docs/book/src/usage/api.rst
+        :returns : Returns the json results of the submission
+        """
+        # Build the URL
+        apiurl = buildapiurl(self.proto, self.host, self.port,
+                             "/tasks/create/url", self.APIPY)
+
+        multipart_url = {"url": ("", url)}
+        request = requests.post(apiurl, files=multipart_url, data=data)
+
+        # ERROR CHECK request.status_code!
+        if request.status_code == 200:
+            jsonreply = json.loads(request.text)
+            return jsonreply
+        else:
+            raise CuckooExceptions.CuckooAPIBadRequest(apiurl)
+
+    def fileview(self, hashid=None, hashtype=None):
+        """
+        View the details for the file given the hash.
+        :param hashid: The hash or task ID to search.
+        :param hashtype: The following types of hash:
+        'taskid', 'md5', 'sha256'.  Any other values will cause
+        an error!
+        :returns : Returns the results of the file in a dict.
+        """
+        if hashid is None:
+            raise CuckooExceptions.CuckooAPINoHash(hashid, hashtype)
+
+        # Get rid of ints
+        hashid = str(hashid)
+
+        # Build the URL
+        apiurl = buildapiurl(self.proto, self.host, self.port,
+                             "/files/view/"+hashtype+"/"+hashid,
+                             self.APIPY)
+
+        # This appears to be unavailable in the documentation...
+        if self.APIPY is True and hashtype == "sha1":
+            raise CuckooExceptions.CuckooAPINotAvailable(apiurl)
+
+        # This appears to be unavailable in the documentation...
+        if hashtype != "md5" and hashtype != "sha1" and hashtype != "sha256":
+            raise CuckooExceptions.CuckooAPINotAvailable(apiurl)
+
+        request = requests.get(apiurl)
+
+        # ERROR CHECK request.status_code!
+        if request.status_code == 200:
+            jsonreply = json.loads(request.text)
+            return jsonreply
         else:
             raise CuckooExceptions.CuckooAPIBadRequest(apiurl)
 
