@@ -562,6 +562,114 @@ class CuckooAPI(object):
         else:
             raise CuckooExceptions.CuckooAPIBadRequest(apiurl)
 
+    def surifilesdownload(self, taskid=None, filepath=None):
+        """
+        Download SuriFiles for the sample identified by task ID.
+        :param taskid: The task ID of the sample.
+        :param filepath: The file path of the file to create/download.
+        :returns : Nothing
+        """
+        if taskid is None or taskid < 1:
+            raise CuckooExceptions.CuckooAPINoTaskID(taskid)
+
+        if filepath is None or os.path.exists(filepath):
+            raise CuckooExceptions.CuckooAPIFileExists(filepath)
+
+        baseurl = "/tasks/get/surifile/"+str(taskid)
+
+        apiurl = buildapiurl(self.proto, self.host, self.port,
+                             baseurl,
+                             self.APIPY)
+
+        if self.APIPY is True:
+            raise CuckooExceptions.CuckooAPINotAvailable(apiurl)
+
+        # Turn on stream to download files
+        request = requests.get(apiurl, stream=True)
+
+        # ERROR CHECK request.status_code!
+        if request.status_code == 200:
+            with open(filepath, 'wb') as f:
+                # Read and write in chunks
+                for chunk in request.iter_content(chunk_size=1024):
+                    if chunk:
+                        f.write(chunk)
+        else:
+            raise CuckooExceptions.CuckooAPIBadRequest(apiurl)
+
+    def fullmemdownload(self, taskid=None, filepath=None):
+        """
+        Download SuriFiles for the sample identified by task ID.
+        :param taskid: The task ID of the sample.
+        :param filepath: The file path of the file to create/download.
+        :returns : Nothing
+        """
+        if taskid is None or taskid < 1:
+            raise CuckooExceptions.CuckooAPINoTaskID(taskid)
+
+        if filepath is None or os.path.exists(filepath):
+            raise CuckooExceptions.CuckooAPIFileExists(filepath)
+
+        baseurl = "/tasks/get/fullmemory/"+str(taskid)
+
+        apiurl = buildapiurl(self.proto, self.host, self.port,
+                             baseurl,
+                             self.APIPY)
+
+        if self.APIPY is True:
+            raise CuckooExceptions.CuckooAPINotAvailable(apiurl)
+
+        # Turn on stream to download files
+        request = requests.get(apiurl, stream=True)
+
+        # ERROR CHECK request.status_code!
+        if request.status_code == 200:
+            with open(filepath, 'wb') as f:
+                # Read and write in chunks
+                for chunk in request.iter_content(chunk_size=1024):
+                    if chunk:
+                        f.write(chunk)
+        else:
+            raise CuckooExceptions.CuckooAPIBadRequest(apiurl)
+
+    def procmemdownload(self, taskid=None, filepath=None, pid=None):
+        """
+        Download SuriFiles for the sample identified by task ID.
+        :param taskid: The task ID of the sample.
+        :param filepath: The file path of the file to create/download.
+        :param pid: Process ID to download
+        :returns : Nothing
+        """
+        if taskid is None or taskid < 1:
+            raise CuckooExceptions.CuckooAPINoTaskID(taskid)
+
+        if filepath is None or os.path.exists(filepath):
+            raise CuckooExceptions.CuckooAPIFileExists(filepath)
+
+        baseurl = "/tasks/get/procmemory/"+str(taskid)
+        if pid is not None:
+            baseurl = baseurl+"/"+str(pid)
+
+        apiurl = buildapiurl(self.proto, self.host, self.port,
+                             baseurl,
+                             self.APIPY)
+
+        if self.APIPY is True:
+            raise CuckooExceptions.CuckooAPINotAvailable(apiurl)
+
+        # Turn on stream to download files
+        request = requests.get(apiurl, stream=True)
+
+        # ERROR CHECK request.status_code!
+        if request.status_code == 200:
+            with open(filepath, 'wb') as f:
+                # Read and write in chunks
+                for chunk in request.iter_content(chunk_size=1024):
+                    if chunk:
+                        f.write(chunk)
+        else:
+            raise CuckooExceptions.CuckooAPIBadRequest(apiurl)
+
 #
 # Call main if run as a script
 #
