@@ -351,7 +351,8 @@ class CuckooAPI(object):
                              "/tasks/create/file", self.APIPY)
 
         with open(filepath, "rb") as sample:
-            multipart_file = {"file": ("temp_file_name", sample)}
+            #multipart_file = {"file": ("temp_file_name", sample)}
+            multipart_file = {"file": (os.path.basename(filepath), sample)}
             request = requests.post(apiurl, files=multipart_file, data=data)
 
         # ERROR CHECK request.status_code!
