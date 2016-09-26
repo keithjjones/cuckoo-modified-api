@@ -627,7 +627,7 @@ def test_taskscreenshots_exception(mock_get):
     ExceptionThrown = False
 
     try:
-        api.taskscreenshots(1, 'Readme.md')
+        api.taskscreenshots(1, 'README.md')
     except CuckooAPI.CuckooExceptions.CuckooAPIFileExists:
         ExceptionThrown = True
 
