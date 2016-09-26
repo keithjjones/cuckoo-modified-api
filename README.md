@@ -15,13 +15,18 @@ https://github.com/spender-sandbox/cuckoo-modified
 This library can be used either with the Django web front end
 or the api.py script in utils.
 
-# Installation
+# Installation:
 
 ```
 pip install git+https://github.com/keithjjones/cuckoo-modified-api.git
 ```
+(Being Implemented)
 
-# Resources
+# Usage:
+
+To come soon!
+
+# Resources:
 
 Documentation can be found at the following links:
 
@@ -34,3 +39,15 @@ Documentation can be found at the following links:
   	- https://realpython.com/blog/python/testing-third-party-apis-with-mocks/
   - Nose2 testing library:
   	- http://nose2.readthedocs.io/en/latest/
+
+# License:
+
+This application is covered by the Creative Commons BY-SA license.
+
+- https://creativecommons.org/licenses/by-sa/4.0/
+- https://creativecommons.org/licenses/by-sa/4.0/legalcode
+
+# Contributing:
+
+If you would like to contribute you can fork this repository, make your changes, and
+then send me a pull request to my "devel" branch.
