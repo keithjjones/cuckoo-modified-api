@@ -3,6 +3,7 @@
 #
 import CuckooAPI
 import mock
+import os
 
 
 def test_submitfile_directory_exception():
@@ -544,6 +545,7 @@ def test_taskdelete_ok_apipy(mock_get):
 
     assert response == {}
 
+
 @mock.patch('CuckooAPI.requests.get')
 def test_taskscreenshots_exception(mock_get):
     """
@@ -580,8 +582,52 @@ def test_taskscreenshots_exception(mock_get):
 
     assert ExceptionThrown is True
 
+    ExceptionThrown = False
+
     try:
         api.taskscreenshots(1, '1.tar.bz', 1)
+    except CuckooAPI.CuckooExceptions.CuckooAPIBadRequest:
+        ExceptionThrown = True
+
+    assert ExceptionThrown is True
+
+
+@mock.patch('CuckooAPI.requests.get')
+def test_sampledownload_exception(mock_get):
+    """
+    Test a pretend sample download with exception
+    """
+    mock_get.return_value.status_code = 404
+
+    api = CuckooAPI.CuckooAPI()
+
+    ExceptionThrown = False
+
+    try:
+        api.sampledownload()
+    except CuckooAPI.CuckooExceptions.CuckooAPINoHash:
+        ExceptionThrown = True
+
+    assert ExceptionThrown is True
+
+    ExceptionThrown = False
+
+    try:
+        api.sampledownload('1', 'task', 'README.md')
+    except CuckooAPI.CuckooExceptions.CuckooAPIFileExists:
+        ExceptionThrown = True
+
+    assert ExceptionThrown is True
+
+    ExceptionThrown = False
+
+    try:
+        os.remove('test1.bin')
+    except:
+        pass
+
+    try:
+        api.sampledownload(1, 'task', 'test1.bin')
     except CuckooAPI.CuckooExceptions.CuckooAPIBadRequest:
         ExceptionThrown = True
 

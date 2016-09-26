@@ -236,12 +236,15 @@ class CuckooAPI(object):
         an error!
         :returns : Returns the results of the file in a dict.
         """
-        # Build the URL
         if hashid is None:
             raise CuckooExceptions.CuckooAPINoHash(hashid, hashtype)
 
+        # Get rid of ints
+        hashid = str(hashid)
+
+        # Build the URL
         apiurl = buildapiurl(self.proto, self.host, self.port,
-                             "/files/view/"+str(hashtype)+"/"+hashid,
+                             "/files/view/"+hashtype+"/"+hashid,
                              self.APIPY)
 
         # This appears to be unavailable in the documentation...
@@ -324,6 +327,49 @@ class CuckooAPI(object):
         apiurl = buildapiurl(self.proto, self.host, self.port,
                              baseurl,
                              self.APIPY)
+
+        # Turn on stream to download files
+        request = requests.get(apiurl, stream=True)
+
+        # ERROR CHECK request.status_code!
+        if request.status_code == 200:
+            with open(filepath, 'wb') as f:
+                # Read and write in chunks
+                for chunk in request.iter_content(chunk_size=1024):
+                    if chunk:
+                        f.write(chunk)
+        else:
+            raise CuckooExceptions.CuckooAPIBadRequest(apiurl)
+
+    def sampledownload(self, hashid=None, hashtype=None,
+                       filepath=None):
+        """
+        Download a file by hash.
+        :param hashid: The hash used to download the sample.
+        :param hashtype: The hash type, can be "task", "md5", sha1",
+        or "sha256".  "task" means the task ID.
+        :returns : Nothing
+        """
+        # Get rid of ints
+        hashid = str(hashid)
+
+        if hashid is None or hashtype is None:
+            raise CuckooExceptions.CuckooAPINoHash(hashid, hashtype)
+
+        if filepath is None or os.path.exists(filepath):
+            raise CuckooExceptions.CuckooAPIFileExists(filepath)
+
+        if self.APIPY is True:
+            baseurl = "/files/get/"+hashid
+        else:
+            baseurl = "/files/get/"+hashtype+"/"+hashid
+
+        apiurl = buildapiurl(self.proto, self.host, self.port,
+                             baseurl,
+                             self.APIPY)
+
+        if hashtype != "sha256" and self.APIPY is True:
+            raise CuckooExceptions.CuckooAPINotAvailable(apiurl)
 
         # Turn on stream to download files
         request = requests.get(apiurl, stream=True)
