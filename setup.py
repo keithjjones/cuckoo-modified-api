@@ -19,7 +19,7 @@ setup(
     license='LICENSE',
     description=('A Python library to '
                  'interface with a cuckoo-modified instance'),
-    long_description=open('README.txt').read(),
+    long_description=open('README.MD').read(),
     install_requires=reqs,
     entry_points={
         'console_scripts': [

@@ -20,7 +20,10 @@ or the api.py script in utils.
 ```
 pip install git+https://github.com/keithjjones/cuckoo-modified-api.git
 ```
-(Being Implemented)
+...or...
+```
+pip install cuckoo-modified-api
+```
 
 # Usage:
 You can load this module like any other module.  As an example to submit a sample to Cuckoo:
