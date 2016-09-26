@@ -65,3 +65,12 @@ class CuckooAPINoTaskID(Exception):
     def __init__(self, taskid):
         Exception.__init__(self, "CuckooAPI:  Task ID {0} not avilable or "
                            "valid!".format(taskid))
+
+
+class CuckooAPINoHash(Exception):
+    """
+    Exception for when an invalid file hash is used.
+    """
+    def __init__(self, hashid, hashtype):
+        Exception.__init__(self, "CuckooAPI:  Hash {0} of type {1} not "
+                           "available or valid!".format(hashid, hashtype))

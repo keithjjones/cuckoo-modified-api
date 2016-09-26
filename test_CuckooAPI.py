@@ -398,3 +398,70 @@ def test_taskreport_ok_apipy(mock_get):
     response = api.taskreport(1)
 
     assert response == {}
+
+
+@mock.patch('CuckooAPI.requests.get')
+def test_fileview_exception(mock_get):
+    """
+    Test a pretend file view with exception
+    """
+    mock_get.return_value.status_code = 404
+
+    api = CuckooAPI.CuckooAPI()
+
+    ExceptionThrown = False
+
+    try:
+        api.fileview()
+    except CuckooAPI.CuckooExceptions.CuckooAPINoHash:
+        ExceptionThrown = True
+
+    assert ExceptionThrown is True
+
+    ExceptionThrown = False
+
+    try:
+        api.fileview('1', 'sha255')
+    except CuckooAPI.CuckooExceptions.CuckooAPINotAvailable:
+        ExceptionThrown = True
+
+    assert ExceptionThrown is True
+
+    ExceptionThrown = False
+
+    try:
+        api.fileview('1', 'sha256')
+    except CuckooAPI.CuckooExceptions.CuckooAPIBadRequest:
+        ExceptionThrown = True
+
+    assert ExceptionThrown is True
+
+
+@mock.patch('CuckooAPI.requests.get')
+def test_fileview_ok_noapipy(mock_get):
+    """
+    Test a pretend file view without api.py
+    """
+    mock_get.return_value.status_code = 200
+    mock_get.return_value.text = '{}'
+
+    api = CuckooAPI.CuckooAPI()
+
+    response = api.fileview('1', 'sha256')
+
+    assert response == {}
+
+
+@mock.patch('CuckooAPI.requests.get')
+def test_fileview_ok_apipy(mock_get):
+    """
+    Test a pretend file view with api.py
+    """
+    mock_get.return_value.status_code = 200
+    mock_get.return_value.text = '{}'
+
+    api = CuckooAPI.CuckooAPI(port=8090, APIPY=True)
+
+    response = api.fileview('1', 'sha256')
+
+    assert response == {}
