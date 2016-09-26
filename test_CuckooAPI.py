@@ -862,6 +862,7 @@ def test_taskstatus_exception_apipy(mock_get):
 
     assert ExceptionThrown is True
 
+
 @mock.patch('CuckooAPI.requests.get')
 def test_taskiocs_exception(mock_get):
     """
@@ -920,6 +921,34 @@ def test_taskiocs_exception_apipy(mock_get):
     try:
         api.taskiocs(1)
     except CuckooAPI.CuckooExceptions.CuckooAPINotAvailable:
+        ExceptionThrown = True
+
+    assert ExceptionThrown is True
+
+
+@mock.patch('CuckooAPI.requests.get')
+def test_droppeddownload_exception(mock_get):
+    """
+    Test a pretend dropped download with exception
+    """
+    mock_get.return_value.status_code = 404
+
+    api = CuckooAPI.CuckooAPI()
+
+    ExceptionThrown = False
+
+    try:
+        api.droppeddownload()
+    except CuckooAPI.CuckooExceptions.CuckooAPINoTaskID:
+        ExceptionThrown = True
+
+    assert ExceptionThrown is True
+
+    ExceptionThrown = False
+
+    try:
+        api.droppeddownload(1, 'dropped.bin')
+    except CuckooAPI.CuckooExceptions.CuckooAPIBadRequest:
         ExceptionThrown = True
 
     assert ExceptionThrown is True
