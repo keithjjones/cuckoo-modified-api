@@ -4,7 +4,7 @@
 import requests
 import mock
 import os
-import CuckooAPI
+import CuckooAPI.api as CuckooAPI
 
 
 def test_submitfile_directory_exception():
@@ -21,7 +21,7 @@ def test_submitfile_directory_exception():
     assert ExceptionThrown is True
 
 
-@mock.patch('CuckooAPI.requests.post')
+@mock.patch('CuckooAPI.api.requests.post')
 def test_submitfile_bad_status_code(mock_get):
     """
     Test that a bad status code throws error
@@ -38,7 +38,7 @@ def test_submitfile_bad_status_code(mock_get):
     assert ExceptionThrown is True
 
 
-@mock.patch('CuckooAPI.requests.post')
+@mock.patch('CuckooAPI.api.requests.post')
 def test_submitfile_ok_noapipy(mock_get):
     """
     Test a pretend submission without api.py
@@ -57,7 +57,7 @@ def test_submitfile_ok_noapipy(mock_get):
     assert response['data']['task_ids'][0] == 14
 
 
-@mock.patch('CuckooAPI.requests.post')
+@mock.patch('CuckooAPI.api.requests.post')
 def test_submitfile_ok_apipy(mock_get):
     """
     Test a pretend submission with api.py
@@ -72,7 +72,7 @@ def test_submitfile_ok_apipy(mock_get):
     assert response['task_ids'][0] == 14
 
 
-@mock.patch('CuckooAPI.requests.post')
+@mock.patch('CuckooAPI.api.requests.post')
 def test_submiturl_bad_status_code(mock_get):
     """
     Test that a bad status code URL submit throws error
@@ -89,7 +89,7 @@ def test_submiturl_bad_status_code(mock_get):
     assert ExceptionThrown is True
 
 
-@mock.patch('CuckooAPI.requests.post')
+@mock.patch('CuckooAPI.api.requests.post')
 def test_submiturl_ok_noapipy(mock_get):
     """
     Test a pretend URL submission without api.py
@@ -108,7 +108,7 @@ def test_submiturl_ok_noapipy(mock_get):
     assert response['data']['task_ids'][0] == 14
 
 
-@mock.patch('CuckooAPI.requests.post')
+@mock.patch('CuckooAPI.api.requests.post')
 def test_submiturl_ok_apipy(mock_get):
     """
     Test a pretend URL submission with api.py
@@ -123,7 +123,7 @@ def test_submiturl_ok_apipy(mock_get):
     assert response['task_ids'][0] == 14
 
 
-@mock.patch('CuckooAPI.requests.get')
+@mock.patch('CuckooAPI.api.requests.get')
 def test_getcuckoostatus_exception(mock_get):
     """
     Test a pretend get status with an exception
@@ -142,7 +142,7 @@ def test_getcuckoostatus_exception(mock_get):
     assert ExceptionThrown is True
 
 
-@mock.patch('CuckooAPI.requests.get')
+@mock.patch('CuckooAPI.api.requests.get')
 def test_getcuckoostatus_ok_noapipy(mock_get):
     """
     Test a pretend get status without api.py
@@ -157,7 +157,7 @@ def test_getcuckoostatus_ok_noapipy(mock_get):
     assert response == {}
 
 
-@mock.patch('CuckooAPI.requests.get')
+@mock.patch('CuckooAPI.api.requests.get')
 def test_getcuckoostatus_ok_apipy(mock_get):
     """
     Test a pretend get status with api.py
@@ -172,7 +172,7 @@ def test_getcuckoostatus_ok_apipy(mock_get):
     assert response == {}
 
 
-@mock.patch('CuckooAPI.requests.get')
+@mock.patch('CuckooAPI.api.requests.get')
 def test_listmachines_exception(mock_get):
     """
     Test a pretend list machines with an exception
@@ -191,7 +191,7 @@ def test_listmachines_exception(mock_get):
     assert ExceptionThrown is True
 
 
-@mock.patch('CuckooAPI.requests.get')
+@mock.patch('CuckooAPI.api.requests.get')
 def test_listmachines_ok_noapipy(mock_get):
     """
     Test a pretend list machines without api.py
@@ -206,7 +206,7 @@ def test_listmachines_ok_noapipy(mock_get):
     assert response == {}
 
 
-@mock.patch('CuckooAPI.requests.get')
+@mock.patch('CuckooAPI.api.requests.get')
 def test_listmachines_ok_apipy(mock_get):
     """
     Test a pretend list machines with api.py
@@ -221,7 +221,7 @@ def test_listmachines_ok_apipy(mock_get):
     assert response == {}
 
 
-@mock.patch('CuckooAPI.requests.get')
+@mock.patch('CuckooAPI.api.requests.get')
 def test_viewmachine_exception(mock_get):
     """
     Test a pretend view machine with exceptions
@@ -249,7 +249,7 @@ def test_viewmachine_exception(mock_get):
     assert ExceptionThrown is True
 
 
-@mock.patch('CuckooAPI.requests.get')
+@mock.patch('CuckooAPI.api.requests.get')
 def test_viewmachine_ok_noapipy(mock_get):
     """
     Test a pretend view machine without api.py
@@ -264,7 +264,7 @@ def test_viewmachine_ok_noapipy(mock_get):
     assert response == {}
 
 
-@mock.patch('CuckooAPI.requests.get')
+@mock.patch('CuckooAPI.api.requests.get')
 def test_viewmachine_ok_apipy(mock_get):
     """
     Test a pretend view machine with api.py
@@ -279,7 +279,7 @@ def test_viewmachine_ok_apipy(mock_get):
     assert response == {}
 
 
-@mock.patch('CuckooAPI.requests.get')
+@mock.patch('CuckooAPI.api.requests.get')
 def test_taskslist_exception(mock_get):
     """
     Test a pretend tasks list with exception
@@ -298,7 +298,7 @@ def test_taskslist_exception(mock_get):
     assert ExceptionThrown is True
 
 
-@mock.patch('CuckooAPI.requests.get')
+@mock.patch('CuckooAPI.api.requests.get')
 def test_taskslist_ok_noapipy(mock_get):
     """
     Test a pretend tasks list without api.py
@@ -313,7 +313,7 @@ def test_taskslist_ok_noapipy(mock_get):
     assert response == {}
 
 
-@mock.patch('CuckooAPI.requests.get')
+@mock.patch('CuckooAPI.api.requests.get')
 def test_taskslist_ok_apipy(mock_get):
     """
     Test a pretend tasks list with api.py
@@ -328,7 +328,7 @@ def test_taskslist_ok_apipy(mock_get):
     assert response == {}
 
 
-@mock.patch('CuckooAPI.requests.get')
+@mock.patch('CuckooAPI.api.requests.get')
 def test_taskview_exception(mock_get):
     """
     Test a pretend task view with exception
@@ -356,7 +356,7 @@ def test_taskview_exception(mock_get):
     assert ExceptionThrown is True
 
 
-@mock.patch('CuckooAPI.requests.get')
+@mock.patch('CuckooAPI.api.requests.get')
 def test_taskview_ok_noapipy(mock_get):
     """
     Test a pretend task view without api.py
@@ -371,7 +371,7 @@ def test_taskview_ok_noapipy(mock_get):
     assert response == {}
 
 
-@mock.patch('CuckooAPI.requests.get')
+@mock.patch('CuckooAPI.api.requests.get')
 def test_taskview_ok_apipy(mock_get):
     """
     Test a pretend task view with api.py
@@ -386,7 +386,7 @@ def test_taskview_ok_apipy(mock_get):
     assert response == {}
 
 
-@mock.patch('CuckooAPI.requests.get')
+@mock.patch('CuckooAPI.api.requests.get')
 def test_taskreport_exception(mock_get):
     """
     Test a pretend task report with exception
@@ -423,7 +423,7 @@ def test_taskreport_exception(mock_get):
     assert ExceptionThrown is True
 
 
-@mock.patch('CuckooAPI.requests.get')
+@mock.patch('CuckooAPI.api.requests.get')
 def test_taskreport_ok_noapipy(mock_get):
     """
     Test a pretend task report without api.py
@@ -438,7 +438,7 @@ def test_taskreport_ok_noapipy(mock_get):
     assert response == {}
 
 
-@mock.patch('CuckooAPI.requests.get')
+@mock.patch('CuckooAPI.api.requests.get')
 def test_taskreport_ok_apipy(mock_get):
     """
     Test a pretend task report with api.py
@@ -453,7 +453,7 @@ def test_taskreport_ok_apipy(mock_get):
     assert response == {}
 
 
-@mock.patch('CuckooAPI.requests.get')
+@mock.patch('CuckooAPI.api.requests.get')
 def test_fileview_exception(mock_get):
     """
     Test a pretend file view with exception
@@ -490,7 +490,7 @@ def test_fileview_exception(mock_get):
     assert ExceptionThrown is True
 
 
-@mock.patch('CuckooAPI.requests.get')
+@mock.patch('CuckooAPI.api.requests.get')
 def test_fileview_ok_noapipy(mock_get):
     """
     Test a pretend file view without api.py
@@ -505,7 +505,7 @@ def test_fileview_ok_noapipy(mock_get):
     assert response == {}
 
 
-@mock.patch('CuckooAPI.requests.get')
+@mock.patch('CuckooAPI.api.requests.get')
 def test_fileview_ok_apipy(mock_get):
     """
     Test a pretend file view with api.py
@@ -520,7 +520,7 @@ def test_fileview_ok_apipy(mock_get):
     assert response == {}
 
 
-@mock.patch('CuckooAPI.requests.get')
+@mock.patch('CuckooAPI.api.requests.get')
 def test_taskdelete_exception(mock_get):
     """
     Test a pretend task delete with exception
@@ -568,7 +568,7 @@ def test_taskdelete_exception(mock_get):
     assert ExceptionThrown is True
 
 
-@mock.patch('CuckooAPI.requests.get')
+@mock.patch('CuckooAPI.api.requests.get')
 def test_taskdelete_ok_noapipy(mock_get):
     """
     Test a pretend task delete without api.py
@@ -583,7 +583,7 @@ def test_taskdelete_ok_noapipy(mock_get):
     assert response == {}
 
 
-@mock.patch('CuckooAPI.requests.get')
+@mock.patch('CuckooAPI.api.requests.get')
 def test_taskdelete_ok_apipy(mock_get):
     """
     Test a pretend task delete with api.py
@@ -598,7 +598,7 @@ def test_taskdelete_ok_apipy(mock_get):
     assert response == {}
 
 
-@mock.patch('CuckooAPI.requests.get')
+@mock.patch('CuckooAPI.api.requests.get')
 def test_taskscreenshots_exception(mock_get):
     """
     Test a pretend task screenshots with exception
@@ -644,7 +644,7 @@ def test_taskscreenshots_exception(mock_get):
     assert ExceptionThrown is True
 
 
-@mock.patch('CuckooAPI.requests.get')
+@mock.patch('CuckooAPI.api.requests.get')
 def test_sampledownload_exception(mock_get):
     """
     Test a pretend sample download with exception
@@ -691,7 +691,7 @@ def test_sampledownload_exception(mock_get):
         pass
 
 
-@mock.patch('CuckooAPI.requests.get')
+@mock.patch('CuckooAPI.api.requests.get')
 def test_pcapdownload_exception(mock_get):
     """
     Test a pretend pcap download with exception
@@ -738,7 +738,7 @@ def test_pcapdownload_exception(mock_get):
         pass
 
 
-@mock.patch('CuckooAPI.requests.get')
+@mock.patch('CuckooAPI.api.requests.get')
 def test_tasksearch_exception(mock_get):
     """
     Test a pretend task search with exception
@@ -766,7 +766,7 @@ def test_tasksearch_exception(mock_get):
     assert ExceptionThrown is True
 
 
-@mock.patch('CuckooAPI.requests.get')
+@mock.patch('CuckooAPI.api.requests.get')
 def test_tasksearch_ok_noapipy(mock_get):
     """
     Test a pretend task search without api.py
@@ -781,7 +781,7 @@ def test_tasksearch_ok_noapipy(mock_get):
     assert response == {}
 
 
-@mock.patch('CuckooAPI.requests.get')
+@mock.patch('CuckooAPI.api.requests.get')
 def test_tasksearch_exception_apipy(mock_get):
     """
     Test a pretend task search with api.py
@@ -801,7 +801,7 @@ def test_tasksearch_exception_apipy(mock_get):
     assert ExceptionThrown is True
 
 
-@mock.patch('CuckooAPI.requests.get')
+@mock.patch('CuckooAPI.api.requests.get')
 def test_taskstatus_exception(mock_get):
     """
     Test a pretend task status with exception
@@ -829,7 +829,7 @@ def test_taskstatus_exception(mock_get):
     assert ExceptionThrown is True
 
 
-@mock.patch('CuckooAPI.requests.get')
+@mock.patch('CuckooAPI.api.requests.get')
 def test_taskstatus_ok_noapipy(mock_get):
     """
     Test a pretend task status without api.py
@@ -844,7 +844,7 @@ def test_taskstatus_ok_noapipy(mock_get):
     assert response == {}
 
 
-@mock.patch('CuckooAPI.requests.get')
+@mock.patch('CuckooAPI.api.requests.get')
 def test_taskstatus_exception_apipy(mock_get):
     """
     Test a pretend task status with api.py
@@ -864,7 +864,7 @@ def test_taskstatus_exception_apipy(mock_get):
     assert ExceptionThrown is True
 
 
-@mock.patch('CuckooAPI.requests.get')
+@mock.patch('CuckooAPI.api.requests.get')
 def test_taskiocs_exception(mock_get):
     """
     Test a pretend task iocs with exception
@@ -892,7 +892,7 @@ def test_taskiocs_exception(mock_get):
     assert ExceptionThrown is True
 
 
-@mock.patch('CuckooAPI.requests.get')
+@mock.patch('CuckooAPI.api.requests.get')
 def test_taskiocs_ok_noapipy(mock_get):
     """
     Test a pretend task iocs without api.py
@@ -907,7 +907,7 @@ def test_taskiocs_ok_noapipy(mock_get):
     assert response == {}
 
 
-@mock.patch('CuckooAPI.requests.get')
+@mock.patch('CuckooAPI.api.requests.get')
 def test_taskiocs_exception_apipy(mock_get):
     """
     Test a pretend task iocs with api.py
@@ -927,7 +927,7 @@ def test_taskiocs_exception_apipy(mock_get):
     assert ExceptionThrown is True
 
 
-@mock.patch('CuckooAPI.requests.get')
+@mock.patch('CuckooAPI.api.requests.get')
 def test_droppeddownload_exception(mock_get):
     """
     Test a pretend dropped download with exception
@@ -955,7 +955,7 @@ def test_droppeddownload_exception(mock_get):
     assert ExceptionThrown is True
 
 
-@mock.patch('CuckooAPI.requests.get')
+@mock.patch('CuckooAPI.api.requests.get')
 def test_surifilesdownload_exception(mock_get):
     """
     Test a pretend surifiles download with exception
@@ -983,7 +983,7 @@ def test_surifilesdownload_exception(mock_get):
     assert ExceptionThrown is True
 
 
-@mock.patch('CuckooAPI.requests.get')
+@mock.patch('CuckooAPI.api.requests.get')
 def test_procmemdownload_exception(mock_get):
     """
     Test a pretend procmem download with exception
@@ -1011,7 +1011,7 @@ def test_procmemdownload_exception(mock_get):
     assert ExceptionThrown is True
 
 
-@mock.patch('CuckooAPI.requests.get')
+@mock.patch('CuckooAPI.api.requests.get')
 def test_fullmemdownload_exception(mock_get):
     """
     Test a pretend fullmem download with exception
