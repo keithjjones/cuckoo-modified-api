@@ -798,3 +798,128 @@ def test_tasksearch_exception_apipy(mock_get):
         ExceptionThrown = True
 
     assert ExceptionThrown is True
+
+
+@mock.patch('CuckooAPI.requests.get')
+def test_taskstatus_exception(mock_get):
+    """
+    Test a pretend task status with exception
+    """
+    mock_get.return_value.status_code = 404
+
+    api = CuckooAPI.CuckooAPI()
+
+    ExceptionThrown = False
+
+    try:
+        api.taskstatus()
+    except CuckooAPI.CuckooExceptions.CuckooAPINoTaskID:
+        ExceptionThrown = True
+
+    assert ExceptionThrown is True
+
+    ExceptionThrown = False
+
+    try:
+        api.taskstatus(1)
+    except CuckooAPI.CuckooExceptions.CuckooAPIBadRequest:
+        ExceptionThrown = True
+
+    assert ExceptionThrown is True
+
+
+@mock.patch('CuckooAPI.requests.get')
+def test_taskstatus_ok_noapipy(mock_get):
+    """
+    Test a pretend task status without api.py
+    """
+    mock_get.return_value.status_code = 200
+    mock_get.return_value.text = '{}'
+
+    api = CuckooAPI.CuckooAPI()
+
+    response = api.taskstatus(1)
+
+    assert response == {}
+
+
+@mock.patch('CuckooAPI.requests.get')
+def test_taskstatus_exception_apipy(mock_get):
+    """
+    Test a pretend task status with api.py
+    """
+    mock_get.return_value.status_code = 200
+    mock_get.return_value.text = '{}'
+
+    api = CuckooAPI.CuckooAPI(port=8090, APIPY=True)
+
+    ExceptionThrown = False
+
+    try:
+        api.taskstatus(1)
+    except CuckooAPI.CuckooExceptions.CuckooAPINotAvailable:
+        ExceptionThrown = True
+
+    assert ExceptionThrown is True
+
+@mock.patch('CuckooAPI.requests.get')
+def test_taskiocs_exception(mock_get):
+    """
+    Test a pretend task iocs with exception
+    """
+    mock_get.return_value.status_code = 404
+
+    api = CuckooAPI.CuckooAPI()
+
+    ExceptionThrown = False
+
+    try:
+        api.taskiocs()
+    except CuckooAPI.CuckooExceptions.CuckooAPINoTaskID:
+        ExceptionThrown = True
+
+    assert ExceptionThrown is True
+
+    ExceptionThrown = False
+
+    try:
+        api.taskiocs(1)
+    except CuckooAPI.CuckooExceptions.CuckooAPIBadRequest:
+        ExceptionThrown = True
+
+    assert ExceptionThrown is True
+
+
+@mock.patch('CuckooAPI.requests.get')
+def test_taskiocs_ok_noapipy(mock_get):
+    """
+    Test a pretend task iocs without api.py
+    """
+    mock_get.return_value.status_code = 200
+    mock_get.return_value.text = '{}'
+
+    api = CuckooAPI.CuckooAPI()
+
+    response = api.taskiocs(1)
+
+    assert response == {}
+
+
+@mock.patch('CuckooAPI.requests.get')
+def test_taskiocs_exception_apipy(mock_get):
+    """
+    Test a pretend task iocs with api.py
+    """
+    mock_get.return_value.status_code = 200
+    mock_get.return_value.text = '{}'
+
+    api = CuckooAPI.CuckooAPI(port=8090, APIPY=True)
+
+    ExceptionThrown = False
+
+    try:
+        api.taskiocs(1)
+    except CuckooAPI.CuckooExceptions.CuckooAPINotAvailable:
+        ExceptionThrown = True
+
+    assert ExceptionThrown is True

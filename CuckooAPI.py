@@ -163,6 +163,63 @@ class CuckooAPI(object):
         else:
             raise CuckooExceptions.CuckooAPIBadRequest(apiurl)
 
+    def taskstatus(self, taskid=None):
+        """
+        View the task status for the task ID.
+        :param taskid: The ID of the task to view.
+        :returns : Returns a dict of task details.
+        """
+        # Build the URL
+        if taskid is None or taskid < 1:
+            raise CuckooExceptions.CuckooAPINoTaskID(taskid)
+
+        apiurl = buildapiurl(self.proto, self.host, self.port,
+                             "/tasks/status/"+str(taskid), self.APIPY)
+
+        # Not available with APIPY
+        if self.APIPY is True:
+            raise CuckooExceptions.CuckooAPINotAvailable(apiurl)
+
+        request = requests.get(apiurl)
+
+        # ERROR CHECK request.status_code!
+        if request.status_code == 200:
+            jsonreply = json.loads(request.text)
+            return jsonreply
+        else:
+            raise CuckooExceptions.CuckooAPIBadRequest(apiurl)
+
+    def taskiocs(self, taskid=None, detailed=False):
+        """
+        View the task IOCs for the task ID.
+        :param taskid: The ID of the task to view.
+        :param detailed: Set to true for detailed IOCs.
+        :returns : Returns a dict of task details.
+        """
+        # Build the URL
+        if taskid is None or taskid < 1:
+            raise CuckooExceptions.CuckooAPINoTaskID(taskid)
+
+        baseurl = "/tasks/get/iocs/"+str(taskid)
+        if detailed is True:
+            baseurl = baseurl + "/detailed"
+
+        apiurl = buildapiurl(self.proto, self.host, self.port,
+                             baseurl, self.APIPY)
+
+        # Not available with APIPY
+        if self.APIPY is True:
+            raise CuckooExceptions.CuckooAPINotAvailable(apiurl)
+
+        request = requests.get(apiurl)
+
+        # ERROR CHECK request.status_code!
+        if request.status_code == 200:
+            jsonreply = json.loads(request.text)
+            return jsonreply
+        else:
+            raise CuckooExceptions.CuckooAPIBadRequest(apiurl)
+
     def taskreport(self, taskid=None, reportformat="json"):
         """
         View the report for the task ID.
