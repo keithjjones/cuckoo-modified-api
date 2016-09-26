@@ -245,6 +245,7 @@ Documentation can be found at the following links:
   - Setup information:
   	- http://stackoverflow.com/questions/14399534/how-can-i-reference-requirements-txt-for-the-install-requires-kwarg-in-setuptool
   	- http://the-hitchhikers-guide-to-packaging.readthedocs.io/en/latest/creation.html
+    - https://pythonhosted.org/an_example_pypi_project/setuptools.html
 
 # License:
 
