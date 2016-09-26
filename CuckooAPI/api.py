@@ -4,7 +4,7 @@
 import requests
 import json
 import os
-import CuckooExceptions
+import CuckooAPI.exceptions as CuckooExceptions
 
 
 #

@@ -1,9 +1,10 @@
 #
 # Headers
 #
-import CuckooAPI
+import requests
 import mock
 import os
+import CuckooAPI
 
 
 def test_submitfile_directory_exception():

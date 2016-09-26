@@ -10,11 +10,14 @@ setup(
     license='LICENSE',
     description=('A Python library to '
                  'interface with a cuckoo-modified instance'),
-    long_description=open('README.MD').read(),
-    install_requires=["requests[security]"],
+    long_description=open('README.TXT').read(),
+    install_requires=[
+	'requests[security]',
+    ],
     entry_points={
         'console_scripts': [
             'CuckooAPI = CuckooAPI.__main__:main'
         ]
-    }
+    },
+    keywords = ['cuckoo','api']
 )
