@@ -735,3 +735,66 @@ def test_pcapdownload_exception(mock_get):
         os.remove('test1.bin')
     except:
         pass
+
+
+@mock.patch('CuckooAPI.requests.get')
+def test_tasksearch_exception(mock_get):
+    """
+    Test a pretend task search with exception
+    """
+    mock_get.return_value.status_code = 404
+
+    api = CuckooAPI.CuckooAPI()
+
+    ExceptionThrown = False
+
+    try:
+        api.tasksearch()
+    except CuckooAPI.CuckooExceptions.CuckooAPINoHash:
+        ExceptionThrown = True
+
+    assert ExceptionThrown is True
+
+    ExceptionThrown = False
+
+    try:
+        api.fileview('1', 'sha256')
+    except CuckooAPI.CuckooExceptions.CuckooAPIBadRequest:
+        ExceptionThrown = True
+
+    assert ExceptionThrown is True
+
+
+@mock.patch('CuckooAPI.requests.get')
+def test_tasksearch_ok_noapipy(mock_get):
+    """
+    Test a pretend task search without api.py
+    """
+    mock_get.return_value.status_code = 200
+    mock_get.return_value.text = '{}'
+
+    api = CuckooAPI.CuckooAPI()
+
+    response = api.fileview('1', 'sha256')
+
+    assert response == {}
+
+
+@mock.patch('CuckooAPI.requests.get')
+def test_tasksearch_exception_apipy(mock_get):
+    """
+    Test a pretend task search with api.py
+    """
+    mock_get.return_value.status_code = 200
+    mock_get.return_value.text = '{}'
+
+    api = CuckooAPI.CuckooAPI(port=8090, APIPY=True)
+
+    ExceptionThrown = False
+
+    try:
+        api.tasksearch('1', 'sha256')
+    except CuckooAPI.CuckooExceptions.CuckooAPINotAvailable:
+        ExceptionThrown = True
+
+    assert ExceptionThrown is True

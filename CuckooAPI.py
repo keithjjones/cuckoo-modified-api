@@ -329,6 +329,34 @@ class CuckooAPI(object):
         else:
             raise CuckooExceptions.CuckooAPIBadRequest(apiurl)
 
+    def tasksearch(self, hashid=None, hashtype=None):
+        """
+        View information about a specific task by hash.
+        :param hashid: MD5, SHA1, or SHA256 hash to search.
+        :param hashtype: 'md5', 'sha1', or 'sha256'
+        :returns : Returns a dict with results.
+        """
+        if hashid is None:
+            raise CuckooExceptions.CuckooAPINoHash(hashid, hashtype)
+
+        # Build the URL
+        apiurl = buildapiurl(self.proto, self.host, self.port,
+                             "/files/view/"+hashtype+"/"+hashid,
+                             self.APIPY)
+
+        # This appears to be unavailable in the documentation...
+        if self.APIPY is True:
+            raise CuckooExceptions.CuckooAPINotAvailable(apiurl)
+
+        request = requests.get(apiurl)
+
+        # ERROR CHECK request.status_code!
+        if request.status_code == 200:
+            jsonreply = json.loads(request.text)
+            return jsonreply
+        else:
+            raise CuckooExceptions.CuckooAPIBadRequest(apiurl)
+
     def fileview(self, hashid=None, hashtype=None):
         """
         View the details for the file given the hash.
@@ -353,7 +381,6 @@ class CuckooAPI(object):
         if self.APIPY is True and hashtype == "sha1":
             raise CuckooExceptions.CuckooAPINotAvailable(apiurl)
 
-        # This appears to be unavailable in the documentation...
         if hashtype != "md5" and hashtype != "sha1" and hashtype != "sha256":
             raise CuckooExceptions.CuckooAPINotAvailable(apiurl)
 
