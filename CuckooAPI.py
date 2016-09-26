@@ -384,6 +384,39 @@ class CuckooAPI(object):
         else:
             raise CuckooExceptions.CuckooAPIBadRequest(apiurl)
 
+    def pcapdownload(self, taskid=None, filepath=None):
+        """
+        Download a pcap by task ID.
+        :param taskid: The task ID to download the pcap.
+        :returns : Nothing
+        """
+        if taskid is None or taskid < 1:
+            raise CuckooExceptions.CuckooAPINoTaskID(taskid)
+
+        if filepath is None or os.path.exists(filepath):
+            raise CuckooExceptions.CuckooAPIFileExists(filepath)
+
+        if self.APIPY is True:
+            baseurl = "/pcap/get/"+str(taskid)
+        else:
+            baseurl = "/tasks/get/pcap/"+str(taskid)
+
+        apiurl = buildapiurl(self.proto, self.host, self.port,
+                             baseurl,
+                             self.APIPY)
+
+        # Turn on stream to download files
+        request = requests.get(apiurl, stream=True)
+
+        # ERROR CHECK request.status_code!
+        if request.status_code == 200:
+            with open(filepath, 'wb') as f:
+                # Read and write in chunks
+                for chunk in request.iter_content(chunk_size=1024):
+                    if chunk:
+                        f.write(chunk)
+        else:
+            raise CuckooExceptions.CuckooAPIBadRequest(apiurl)
 
 #
 # Call main if run as a script

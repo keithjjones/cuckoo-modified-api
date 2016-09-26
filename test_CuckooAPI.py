@@ -632,3 +632,55 @@ def test_sampledownload_exception(mock_get):
         ExceptionThrown = True
 
     assert ExceptionThrown is True
+
+    try:
+        os.remove('test1.bin')
+    except:
+        pass
+
+
+@mock.patch('CuckooAPI.requests.get')
+def test_pcapdownload_exception(mock_get):
+    """
+    Test a pretend pcap download with exception
+    """
+    mock_get.return_value.status_code = 404
+
+    api = CuckooAPI.CuckooAPI()
+
+    ExceptionThrown = False
+
+    try:
+        api.pcapdownload()
+    except CuckooAPI.CuckooExceptions.CuckooAPINoTaskID:
+        ExceptionThrown = True
+
+    assert ExceptionThrown is True
+
+    ExceptionThrown = False
+
+    try:
+        api.pcapdownload(1, 'README.md')
+    except CuckooAPI.CuckooExceptions.CuckooAPIFileExists:
+        ExceptionThrown = True
+
+    assert ExceptionThrown is True
+
+    ExceptionThrown = False
+
+    try:
+        os.remove('test1.bin')
+    except:
+        pass
+
+    try:
+        api.pcapdownload(1, 'test1.bin')
+    except CuckooAPI.CuckooExceptions.CuckooAPIBadRequest:
+        ExceptionThrown = True
+
+    assert ExceptionThrown is True
+
+    try:
+        os.remove('test1.bin')
+    except:
+        pass
