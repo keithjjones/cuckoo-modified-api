@@ -30,7 +30,7 @@ You can load this module like any other module.  As an example to submit a sampl
 ```
 Python 2.7.12 (v2.7.12:d33e0cf91556, Jun 27 2016, 15:24:40) [MSC v.1500 64 bit (AMD64)] on win32
 Type "help", "copyright", "credits" or "license" for more information.
->>> import CuckooAPI
+>>> import CuckooAPI.api as CuckooAPI
 >>> api = CuckooAPI.CuckooAPI("10.0.0.144")
 >>> api.submitfile("malware.exe")
 {u'url': [u'http://example.tld/submit/status/3/'], u'data': {u'task_ids': [3], u'message': u'Task ID 3 has been submitted'}, u'error': False}
@@ -44,7 +44,7 @@ from Cuckoo by setting the following API characteristics:
 ```
 Python 2.7.12 (v2.7.12:d33e0cf91556, Jun 27 2016, 15:24:40) [MSC v.1500 64 bit (AMD64)] on win32
 Type "help", "copyright", "credits" or "license" for more information.
->>> import CuckooAPI
+>>> import CuckooAPI.api as CuckooAPI
 >>> api = CuckooAPI.CuckooAPI("10.0.0.144", APIPY=True, port=8090)
 ```
 
