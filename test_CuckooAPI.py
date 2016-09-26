@@ -71,6 +71,57 @@ def test_submitfile_ok_apipy(mock_get):
     assert response['task_ids'][0] == 14
 
 
+@mock.patch('CuckooAPI.requests.post')
+def test_submiturl_bad_status_code(mock_get):
+    """
+    Test that a bad status code URL submit throws error
+    """
+    mock_get.return_value.status_code = 404
+
+    api = CuckooAPI.CuckooAPI()
+    ExceptionThrown = False
+    try:
+        api.submiturl('http://www.google.com')
+    except CuckooAPI.CuckooExceptions.CuckooAPIBadRequest:
+        ExceptionThrown = True
+
+    assert ExceptionThrown is True
+
+
+@mock.patch('CuckooAPI.requests.post')
+def test_submiturl_ok_noapipy(mock_get):
+    """
+    Test a pretend URL submission without api.py
+    """
+    mock_get.return_value.status_code = 200
+    mock_get.return_value.text = ('{"url": ["http://example.tld/submit/'
+                                  'status/14/"], "data": {"task_ids": [14],'
+                                  ' "message": "Task ID 14 has been '
+                                  'submitted"}, "error": false}')
+
+    api = CuckooAPI.CuckooAPI()
+
+    response = api.submiturl('http://www.google.com')
+
+    assert response['url'][0] == "http://example.tld/submit/status/14/"
+    assert response['data']['task_ids'][0] == 14
+
+
+@mock.patch('CuckooAPI.requests.post')
+def test_submiturl_ok_apipy(mock_get):
+    """
+    Test a pretend URL submission with api.py
+    """
+    mock_get.return_value.status_code = 200
+    mock_get.return_value.text = ('{"task_ids": [14]}')
+
+    api = CuckooAPI.CuckooAPI(port=8090, APIPY=True)
+
+    response = api.submiturl('http://www.google.com')
+
+    assert response['task_ids'][0] == 14
+
+
 @mock.patch('CuckooAPI.requests.get')
 def test_getcuckoostatus_exception(mock_get):
     """

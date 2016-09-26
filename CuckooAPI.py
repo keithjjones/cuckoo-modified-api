@@ -66,7 +66,7 @@ class CuckooAPI(object):
         :param data: This is data containing any other options for the
         submission form.  This is a dict of values accepted by the
         create file options in the cuckoo-modified API.  More form information
-        can be found int the following link:
+        can be found in the following link:
         https://github.com/spender-sandbox/cuckoo-modified/blob/master/docs/book/src/usage/api.rst
         :returns : Returns the json results of the submission
         """
@@ -82,6 +82,31 @@ class CuckooAPI(object):
         with open(filepath, "rb") as sample:
             multipart_file = {"file": ("temp_file_name", sample)}
             request = requests.post(apiurl, files=multipart_file, data=data)
+
+        # ERROR CHECK request.status_code!
+        if request.status_code == 200:
+            jsonreply = json.loads(request.text)
+            return jsonreply
+        else:
+            raise CuckooExceptions.CuckooAPIBadRequest(apiurl)
+
+    def submiturl(self, url, data=None):
+        """
+        Function to submit a URL to Cuckoo for analysis.
+        :param url: URL to submit.
+        :param data: This is data containing any other options for the
+        submission form.  This is a dict of values accepted by the
+        create file options in the cuckoo-modified API.  More form information
+        can be found in the following link:
+        https://github.com/spender-sandbox/cuckoo-modified/blob/master/docs/book/src/usage/api.rst
+        :returns : Returns the json results of the submission
+        """
+        # Build the URL
+        apiurl = buildapiurl(self.proto, self.host, self.port,
+                             "/tasks/create/url", self.APIPY)
+
+        multipart_url = {"url": ("", url)}
+        request = requests.post(apiurl, files=multipart_url, data=data)
 
         # ERROR CHECK request.status_code!
         if request.status_code == 200:
