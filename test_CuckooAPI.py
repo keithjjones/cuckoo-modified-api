@@ -543,3 +543,46 @@ def test_taskdelete_ok_apipy(mock_get):
     response = api.taskdelete(1)
 
     assert response == {}
+
+@mock.patch('CuckooAPI.requests.get')
+def test_taskscreenshots_exception(mock_get):
+    """
+    Test a pretend task screenshots with exception
+    """
+    mock_get.return_value.status_code = 404
+
+    api = CuckooAPI.CuckooAPI()
+
+    ExceptionThrown = False
+
+    try:
+        api.taskscreenshots()
+    except CuckooAPI.CuckooExceptions.CuckooAPINoTaskID:
+        ExceptionThrown = True
+
+    assert ExceptionThrown is True
+
+    ExceptionThrown = False
+
+    try:
+        api.taskscreenshots(1)
+    except CuckooAPI.CuckooExceptions.CuckooAPIFileExists:
+        ExceptionThrown = True
+
+    assert ExceptionThrown is True
+
+    ExceptionThrown = False
+
+    try:
+        api.taskscreenshots(1, 'Readme.md')
+    except CuckooAPI.CuckooExceptions.CuckooAPIFileExists:
+        ExceptionThrown = True
+
+    assert ExceptionThrown is True
+
+    try:
+        api.taskscreenshots(1, '1.tar.bz', 1)
+    except CuckooAPI.CuckooExceptions.CuckooAPIBadRequest:
+        ExceptionThrown = True
+
+    assert ExceptionThrown is True

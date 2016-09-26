@@ -83,3 +83,13 @@ class CuckooAPINoHash(Exception):
     def __init__(self, hashid, hashtype):
         Exception.__init__(self, "CuckooAPI:  Hash {0} of type {1} not "
                            "available or invalid!".format(hashid, hashtype))
+
+
+class CuckooAPIFileExists(Exception):
+    """
+    Exception for when a file is about to be saved over an existing file
+    or the file name is invalid.
+    """
+    def __init__(self, filepath):
+        Exception.__init__(self, "CuckooAPI: {0} already exists or "
+                           "is invalid!".format(filepath))

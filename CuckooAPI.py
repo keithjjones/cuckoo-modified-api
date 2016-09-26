@@ -265,7 +265,7 @@ class CuckooAPI(object):
         """
         Delete a task.
         :param taskid: The task ID to delete.
-        :returns : Nothing
+        :returns : Status
         """
         if taskid is None or taskid < 1:
             raise CuckooExceptions.CuckooAPINoTaskID(taskid)
@@ -284,6 +284,47 @@ class CuckooAPI(object):
             raise CuckooExceptions.CuckooAPINoTaskID(taskid)
         elif request.status_code == 500:
             raise CuckooExceptions.CuckooAPITaskNoDelete(taskid)
+        else:
+            raise CuckooExceptions.CuckooAPIBadRequest(apiurl)
+
+    def taskscreenshots(self, taskid=None, filepath=None, screenshot=None):
+        """
+        Download screenshot(s).
+        :param taskid: The task ID for the screenshot(s).
+        :param filepath: Where to save the screenshot(s).  The screenshots
+        are saved as .tar.bz!  Be sure to reflect this in your filepath!
+        :param screenshot: The screenshot number to download.
+        :returns : Nothing
+        """
+        if taskid is None or taskid < 1:
+            raise CuckooExceptions.CuckooAPINoTaskID(taskid)
+
+        if filepath is None or os.path.exists(filepath):
+            raise CuckooExceptions.CuckooAPIFileExists(filepath)
+
+        if self.APIPY is True:
+            baseurl = "/tasks/screenshots/"+str(taskid)
+            if screenshot is not None:
+                baseurl = baseurl+"/"+str(screenshot)
+        else:
+            baseurl = "/tasks/get/screenshot/"+str(taskid)
+            if screenshot is not None:
+                baseurl = baseurl+"/"+str(screenshot)
+
+        apiurl = buildapiurl(self.proto, self.host, self.port,
+                             baseurl,
+                             self.APIPY)
+
+        # Turn on stream to download files
+        request = requests.get(apiurl, stream=True)
+
+        # ERROR CHECK request.status_code!
+        if request.status_code == 200:
+            with open(filepath, 'wb') as f:
+                # Read and write in chunks
+                for chunk in request.iter_content(chunk_size=1024):
+                    if chunk:
+                        f.write(chunk)
         else:
             raise CuckooExceptions.CuckooAPIBadRequest(apiurl)
 
