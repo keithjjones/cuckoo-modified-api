@@ -49,6 +49,9 @@ Type "help", "copyright", "credits" or "license" for more information.
 ```
 
 # Documentation
+
+Online documentation: https://keithjjones.github.io/cuckoo-modified-api.github.io/
+
 Documentation can be built from the docs directory.  For example, go into that directory
 and type make html.  
 
