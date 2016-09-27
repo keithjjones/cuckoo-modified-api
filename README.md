@@ -49,6 +49,9 @@ Type "help", "copyright", "credits" or "license" for more information.
 ```
 
 # Documentation
+Documentation can be built from the docs directory.  For example, go into that directory
+and type make html.  
+
 ```
 Help on module CuckooAPI:
 

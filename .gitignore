@@ -2,6 +2,9 @@
 *~
 *#
 
+# Sphinx Directories
+_build/
+
 # Mac Files
 .DS_Store
 
