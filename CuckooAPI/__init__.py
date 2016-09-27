@@ -61,7 +61,7 @@ class CuckooAPI(object):
     def getcuckoostatus(self):
         """
         Function to get the status of the Cuckoo instance.
-        :returns : Returns the status as a dictionary.
+        :return: Returns the status as a dictionary.
         """
         # Build the URL
         apiurl = buildapiurl(self.proto, self.host, self.port,
@@ -79,7 +79,7 @@ class CuckooAPI(object):
     def listmachines(self):
         """
         Lists the machines available for analysis.
-        :returns : Returns the list of machines as a list.
+        :return: Returns the list of machines as a list.
         """
         # Build the URL
         apiurl = buildapiurl(self.proto, self.host, self.port,
@@ -97,7 +97,7 @@ class CuckooAPI(object):
         """
         Lists the details about an analysis machine.
         :param vmname: The vm name for the machine to be listed
-        :returns : Returns the dictionary of the machine specifics
+        :return: Returns the dictionary of the machine specifics
         """
         # Build the URL
         if vmname is None:
@@ -120,7 +120,7 @@ class CuckooAPI(object):
         :param limit: Limit to this many results (Optional)
         :param offset: Offset the output to offset in the total task list
         and requires limit above. (Optional)
-        :returns : Returns a list of task details.
+        :return: Returns a list of task details.
         """
         # Build the URL
         baseurl = "/tasks/list"
@@ -144,7 +144,7 @@ class CuckooAPI(object):
         """
         View the task for the task ID.
         :param taskid: The ID of the task to view.
-        :returns : Returns a dict of task details.
+        :return: Returns a dict of task details.
         """
         # Build the URL
         if taskid is None or taskid < 1:
@@ -166,7 +166,7 @@ class CuckooAPI(object):
         """
         View the task status for the task ID.
         :param taskid: The ID of the task to view.
-        :returns : Returns a dict of task details.
+        :return: Returns a dict of task details.
         """
         # Build the URL
         if taskid is None or taskid < 1:
@@ -193,7 +193,7 @@ class CuckooAPI(object):
         View the task IOCs for the task ID.
         :param taskid: The ID of the task to view.
         :param detailed: Set to true for detailed IOCs.
-        :returns : Returns a dict of task details.
+        :return: Returns a dict of task details.
         """
         # Build the URL
         if taskid is None or taskid < 1:
@@ -224,7 +224,7 @@ class CuckooAPI(object):
         View the report for the task ID.
         :param taskid: The ID of the task to report.
         :param reportformat: Right now only json is supported.
-        :returns : Returns a dict report for the task.
+        :return: Returns a dict report for the task.
         """
         # Build the URL
         if taskid is None or taskid < 1:
@@ -256,7 +256,7 @@ class CuckooAPI(object):
         """
         Delete a task.
         :param taskid: The task ID to delete.
-        :returns : Status
+        :return: Status
         """
         if taskid is None or taskid < 1:
             raise CuckooAPINoTaskID(taskid)
@@ -290,7 +290,7 @@ class CuckooAPI(object):
         This function adds the apppropriate file extensions to the
         filepath variable.
         :param screenshot: The screenshot number to download.
-        :returns : Nothing
+        :return: Nothing
         """
         if taskid is None or taskid < 1:
             raise CuckooAPINoTaskID(taskid)
@@ -338,7 +338,7 @@ class CuckooAPI(object):
         create file options in the cuckoo-modified API.  More form information
         can be found in the following link:
         https://github.com/spender-sandbox/cuckoo-modified/blob/master/docs/book/src/usage/api.rst
-        :returns : Returns the json results of the submission
+        :return: Returns the json results of the submission
         """
         # Error if the file does not exist
         if (filepath is None or not os.path.exists(filepath) or
@@ -370,7 +370,7 @@ class CuckooAPI(object):
         create file options in the cuckoo-modified API.  More form information
         can be found in the following link:
         https://github.com/spender-sandbox/cuckoo-modified/blob/master/docs/book/src/usage/api.rst
-        :returns : Returns the json results of the submission
+        :return: Returns the json results of the submission
         """
         # Build the URL
         apiurl = buildapiurl(self.proto, self.host, self.port,
@@ -391,7 +391,7 @@ class CuckooAPI(object):
         View information about a specific task by hash.
         :param hashid: MD5, SHA1, or SHA256 hash to search.
         :param hashtype: 'md5', 'sha1', or 'sha256'
-        :returns : Returns a dict with results.
+        :return: Returns a dict with results.
         """
         if hashid is None:
             raise CuckooAPINoHash(hashid, hashtype)
@@ -421,7 +421,7 @@ class CuckooAPI(object):
         :param hashtype: The following types of hash:
         'taskid', 'md5', 'sha256'.  Any other values will cause
         an error!
-        :returns : Returns the results of the file in a dict.
+        :return: Returns the results of the file in a dict.
         """
         if hashid is None:
             raise CuckooAPINoHash(hashid, hashtype)
@@ -457,7 +457,7 @@ class CuckooAPI(object):
         :param hashid: The hash used to download the sample.
         :param hashtype: The hash type, can be "task", "md5", sha1",
         or "sha256".  "task" means the task ID.
-        :returns : Nothing
+        :return: Nothing
         """
         # Get rid of ints
         hashid = str(hashid)
@@ -497,7 +497,7 @@ class CuckooAPI(object):
         """
         Download a pcap by task ID.
         :param taskid: The task ID to download the pcap.
-        :returns : Nothing
+        :return: Nothing
         """
         if taskid is None or taskid < 1:
             raise CuckooAPINoTaskID(taskid)
@@ -532,7 +532,7 @@ class CuckooAPI(object):
         Download files dropped by sample identified by task ID.
         :param taskid: The task ID of the sample.
         :param filepath: The file path of the file to create/download.
-        :returns : Nothing
+        :return: Nothing
         """
         if taskid is None or taskid < 1:
             raise CuckooAPINoTaskID(taskid)
@@ -567,7 +567,7 @@ class CuckooAPI(object):
         Download SuriFiles for the sample identified by task ID.
         :param taskid: The task ID of the sample.
         :param filepath: The file path of the file to create/download.
-        :returns : Nothing
+        :return: Nothing
         """
         if taskid is None or taskid < 1:
             raise CuckooAPINoTaskID(taskid)
@@ -602,7 +602,7 @@ class CuckooAPI(object):
         Download SuriFiles for the sample identified by task ID.
         :param taskid: The task ID of the sample.
         :param filepath: The file path of the file to create/download.
-        :returns : Nothing
+        :return: Nothing
         """
         if taskid is None or taskid < 1:
             raise CuckooAPINoTaskID(taskid)
@@ -638,7 +638,7 @@ class CuckooAPI(object):
         :param taskid: The task ID of the sample.
         :param filepath: The file path of the file to create/download.
         :param pid: Process ID to download
-        :returns : Nothing
+        :return: Nothing
         """
         if taskid is None or taskid < 1:
             raise CuckooAPINoTaskID(taskid)
