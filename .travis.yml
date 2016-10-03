@@ -5,7 +5,7 @@ python:
 
 # command to install dependencies
 install: 
-- pip install --no-binary pycparser
+- pip install git+https://github.com/eliben/pycparser@release_v2.14
 - pip install -r requirements.txt
 
 # command to run tests
