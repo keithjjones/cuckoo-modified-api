@@ -419,6 +419,7 @@ class CuckooAPI(object):
         """
 
         View information about a specific task by hash.
+
         :param hashid: MD5, SHA1, or SHA256 hash to search.
         :param hashtype: 'md5', 'sha1', or 'sha256'
         :returns: Returns a dict with results.
